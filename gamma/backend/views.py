@@ -1,36 +1,33 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from .models import Post
-from .serializer import UserPostSerializer
+from .models import Status
+from .serializer import StatusSerializer
 import datetime
 
 from rest_framework import generics, permissions
 
 # Create your views here.
 
-# User Posts(Tweets)
+# User Status(Tweets)
 # GET request
-class UserPostGetView(generics.CreateAPIView):
-  queryset = Post.objects.all()
+class GetStatusView(generics.CreateAPIView):
+  queryset = Status.objects.all()
   http_method_names = ['get']
 
   def get(self, request, format=None):
-    serializer = UserPostSerializer(UserPostGetView.get_queryset(self), many=True)
+    serializer = StatusSerializer(Status.objects.all(), many=True)
     return Response(serializer.data)
 
 # POST request
-class UserPostCreateView(generics.CreateAPIView):
-  queryset = Post.objects.all()
-  serializer_class = UserPostSerializer
+class PostStatusView(generics.CreateAPIView):
+  queryset = Status.objects.all()
+  serializer_class = StatusSerializer
   # permission_classes = [permissions.IsAuthenticated]
   http_method_names = ['post']
 
   def post(self, request, format=None):
-    serializer = UserPostSerializer(data=request.data)
+    serializer = StatusSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
       return Response(serializer.data)
     return Response(serializer.errors)
-
-
-

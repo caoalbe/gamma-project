@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Post
+from .models import Status
 
-class UserPostSerializer(serializers.ModelSerializer):
+class StatusSerializer(serializers.ModelSerializer):
   class Meta:
-    model=Post
-    fields=('nameDisplay','nameHandle', 'postText', 'datePosted')
+    model=Status
+    fields=('statusID', 'userID', 'text')
