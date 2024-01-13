@@ -13,8 +13,6 @@ delete every file, then
 `python manage.py migrate backend`
 `python manage.py migrate`
 
-\*\*for some reason; we cant detect the global python install??
-
 run the frontend:
 `npm start` <-- frontend directory
 
@@ -25,6 +23,4 @@ TODO:
 
 - account creation form
 - accoung sign in form
-- connect posts to accounts with foreign key
-- add time of day to posts models
 - automate datetime in post creation
