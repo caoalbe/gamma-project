@@ -21,6 +21,7 @@ build:
 
 TODO:
 
+- pagewrapper component
 - account creation form
 - accoung sign in form
 - automate datetime in post creation

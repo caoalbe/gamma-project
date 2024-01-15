@@ -7,7 +7,6 @@ import reportWebVitals from "./reportWebVitals";
 const root = ReactDOM.createRoot(document.getElementById("page2"));
 root.render(
   <React.StrictMode>
-    {/* <div>ermmm</div> */}
     <App />
   </React.StrictMode>
 );
