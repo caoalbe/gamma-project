@@ -40,7 +40,7 @@ const Page2 = (): JSX.Element => {
   return (
     <PageWrapper>
       <div className="text-white">
-        <div className="flex border-b pl-4 py-3 w-5/12 bg-black fixed">
+        <div className="flex border-b border-neutral-700 pl-4 py-3 w-5/12 bg-black fixed">
           <div className="block w-1/2 text-center">
             <span className="text-xl">Following</span>
           </div>
@@ -49,7 +49,7 @@ const Page2 = (): JSX.Element => {
           </div>
         </div>
         {/* TODO: replace same height hack to workaorund fixed position  */}
-        <div className="flex border-b pl-4 py-3 w-5/12 bg-black">
+        <div className="flex border-b border-neutral-700 pl-4 py-3 w-5/12 bg-black">
           <div className="block w-1/2 text-center">
             <span className="text-xl">Following</span>
           </div>
@@ -57,7 +57,10 @@ const Page2 = (): JSX.Element => {
             <span className="text-xl">For You</span>
           </div>
         </div>
-        <div id="write-your-tweet" className="flex pt-2 pb-3 pr-3 border-b">
+        <div
+          id="write-your-tweet"
+          className="flex pt-2 pb-3 pr-3 border-b border-neutral-700"
+        >
           <div id="pfp-col" className="w-1/12"></div>
           <div id="right-col" className="flex-col w-11/12 space-y-0.5">
             <div id="text-box">
@@ -68,7 +71,7 @@ const Page2 = (): JSX.Element => {
                 ref={textAreaRef}
                 className="block w-full bg-black resize-none
                               py-1.5 pl-2 pr-8 text-xl text-white
-                              placeholder:text-gray-400 focus:outline-0"
+                              placeholder:text-neutral-500 focus:outline-0"
                 rows={minTextSize}
               />
             </div>
@@ -81,16 +84,16 @@ const Page2 = (): JSX.Element => {
               <button
                 onClick={() => {
                   console.log("pressed!");
-                  fetch(CREATE_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      nameDisplay: "display",
-                      nameHandle: "handle",
-                      postText: draftText,
-                      datePosted: "2024-01-10",
-                    }),
-                  });
+                  // fetch(CREATE_URL, {
+                  //   method: "POST",
+                  //   headers: { "Content-Type": "application/json" },
+                  //   body: JSON.stringify({
+                  //     nameDisplay: "display",
+                  //     nameHandle: "handle",
+                  //     postText: draftText,
+                  //     datePosted: "2024-01-10",
+                  //   }),
+                  // });
                   setDraftText("");
                 }}
                 className="text-lg font-semibold select-none"

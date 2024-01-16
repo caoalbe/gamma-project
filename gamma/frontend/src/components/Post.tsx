@@ -7,7 +7,7 @@ interface PostProps {
 
 const Post = (props: PostProps): JSX.Element => (
   <>
-    <div id="ex-post" className="flex py-2 pr-3 border-b">
+    <div id="ex-post" className="flex py-2 pr-3 border-b border-neutral-700">
       <div id="pfp-col" className="w-1/12"></div>
       <div id="right-col" className="flex-col w-11/12 space-y-0.5">
         <div>
