@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { process_date_time } from "./utils";
 import { GET_USER_ID } from "./api_endpoints";
+import { Link } from "react-router-dom";
 
 interface PostProps {
   statusID: string;
@@ -46,10 +47,18 @@ const Post = (props: PostProps): JSX.Element => {
         <div id="pfp-col" className="w-1/12"></div>
         <div id="right-col" className="flex-col w-11/12 space-y-0.5">
           <div>
-            <span>{authorInfo[0].nameDisplay} </span>
+            <Link to={`../${authorInfo[0].nameHandle}`}>
+              <span className="font-semibold">
+                {authorInfo[0].nameDisplay}{" "}
+              </span>
+              <span className="text-neutral-500">
+                @{authorInfo[0].nameHandle}
+              </span>
+            </Link>
+
             <span className="text-neutral-500">
-              @{authorInfo[0].nameHandle} ·{" "}
-              {process_date_time(props.dateTimePosted)}
+              {" "}
+              · {process_date_time(props.dateTimePosted)}
             </span>
             <br />
             <span>{props.text}</span>

@@ -24,3 +24,4 @@ TODO:
 - account creation form
 - account sign in form
 - automate datetime in post creation
+- prettier 404 page

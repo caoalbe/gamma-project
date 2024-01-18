@@ -1,16 +1,16 @@
 import Home from "./pages/Home";
-import Page2 from "./pages/Page2";
 import Page404 from "./pages/Page404";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
 const PageInfo = [
   {
-    url: "",
-    component: <Home />,
+    url: "/:userID",
+    component: <Profile />,
   },
   {
-    url: "/page2",
-    component: <Page2 />,
+    url: "/home",
+    component: <Home />,
   },
   {
     url: "/login",
