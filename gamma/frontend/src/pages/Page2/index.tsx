@@ -108,6 +108,7 @@ const Page2 = (): JSX.Element => {
             statusID={entry.statusID}
             userID={entry.userID}
             text={entry.text}
+            dateTimePosted={entry.dateTimePosted}
           />
         ))}
       </div>

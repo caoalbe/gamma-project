@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { process_date_time } from "./utils";
 
 interface PostProps {
   statusID: string;
   userID: string;
   text: string;
-  // date: string; // TODO: use some datetime class
+  dateTimePosted: string;
 }
 
 interface UserProps {
@@ -47,8 +48,8 @@ const Post = (props: PostProps): JSX.Element => {
         <div id="right-col" className="flex-col w-11/12 space-y-0.5">
           <div>
             <span>
-              {/* {authorInfo.nameDisplay} @{authorInfo.nameHandle} · {props.date} */}
-              {authorInfo[0].nameDisplay} @{authorInfo[0].nameHandle} · date
+              {authorInfo[0].nameDisplay} @{authorInfo[0].nameHandle} ·{" "}
+              {process_date_time(props.dateTimePosted)}
             </span>
             <br />
             <span>{props.text}</span>

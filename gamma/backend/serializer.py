@@ -4,7 +4,7 @@ from .models import Status, User
 class StatusSerializer(serializers.ModelSerializer):
   class Meta:
     model=Status
-    fields=('statusID', 'userID', 'text')
+    fields=('statusID', 'userID', 'text', 'dateTimePosted')
 
 
 class UserSerializer(serializers.ModelSerializer):

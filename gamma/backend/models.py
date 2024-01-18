@@ -24,7 +24,7 @@ class Status(models.Model):
   )
   userID = models.ForeignKey(User, on_delete=models.CASCADE)
   text = models.CharField(max_length=280)
-  # dateTimePosted = models.DateTimeField()
+  dateTimePosted = models.DateTimeField()
 
   def __str__(self):
     return self.text
