@@ -10,7 +10,7 @@ const PageInfo = [
     component: <Home />,
   },
   {
-    url: "/:userID",
+    url: "/:nameHandle",
     component: <Profile />,
   },
   {

@@ -1,12 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import Post from "../../components/Post";
 import PageWrapper from "../../components/PageWrapper";
-import { GET_STATUS, CREATE_STATUS } from "../../components/api_endpoints";
+import {
+  GET_STATUS,
+  CREATE_STATUS,
+  StatusAPIProps,
+} from "../../components/api_endpoints";
 
 const minTextSize: number = 3;
 
 const Home = (): JSX.Element => {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<StatusAPIProps[]>([]);
   const [draftText, setDraftText] = useState<string>("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 

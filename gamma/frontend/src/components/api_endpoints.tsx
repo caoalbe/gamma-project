@@ -8,3 +8,18 @@ export const GET_USER_HANDLE = SERVER_URL + "get_user_handle/"; // get user data
 // status model
 export const GET_STATUS = SERVER_URL + "get_status/"; // get all post data
 export const CREATE_STATUS = SERVER_URL + "post_status/"; // create a post
+
+// props for views
+export interface UserAPIProps {
+  userID: string;
+  nameHandle: string;
+  nameDisplay: string;
+  bio: string;
+}
+
+export interface StatusAPIProps {
+  statusID: string;
+  userID: string;
+  text: string;
+  dateTimePosted: string;
+}
