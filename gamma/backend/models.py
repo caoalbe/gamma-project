@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 class User(models.Model):
+  # is userID necessary is nameHandle is unique?
   userID = models.UUIDField(
     primary_key = True,
     default = uuid.uuid4,
