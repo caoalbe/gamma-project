@@ -10,4 +10,4 @@ class StatusSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model=User
-    fields=('userID', 'nameHandle', 'nameDisplay')
+    fields=('userID', 'nameHandle', 'nameDisplay', 'bio')

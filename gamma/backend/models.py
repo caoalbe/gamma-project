@@ -12,6 +12,7 @@ class User(models.Model):
   )
   nameHandle = models.CharField(max_length=50, unique=True)
   nameDisplay = models.CharField(max_length=50)
+  bio = models.CharField(max_length=280, default=None, blank=True, null=True)
 
   def __str__(self):
     return "@" + self.nameHandle
