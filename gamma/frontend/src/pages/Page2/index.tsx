@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import Post from "../../components/Post";
 import PageWrapper from "../../components/PageWrapper";
+import { GET_STATUS, CREATE_STATUS } from "../../components/api_endpoints";
 
-const FETCH_URL = "http://localhost:8000/api/get_status/";
-const CREATE_URL = "http://localhost:8000/api/post_status/";
 const minTextSize: number = 3;
 
 const Page2 = (): JSX.Element => {
@@ -13,12 +12,14 @@ const Page2 = (): JSX.Element => {
 
   // Fetch posts from server
   useEffect(() => {
-    fetch(FETCH_URL)
-      .then((res) => {
-        return res.json();
-      })
+    fetch(GET_STATUS)
+      .then((res) => res.json())
       .then((data) => {
         setPosts(data);
+      })
+      .catch((error) => {
+        // probably network error
+        // TODO: create some flag for 'internet connection' error
       });
   }, []);
 
@@ -84,7 +85,7 @@ const Page2 = (): JSX.Element => {
               <button
                 onClick={() => {
                   console.log("pressed!");
-                  // fetch(CREATE_URL, {
+                  // fetch(CREATE_STATUS, {
                   //   method: "POST",
                   //   headers: { "Content-Type": "application/json" },
                   //   body: JSON.stringify({

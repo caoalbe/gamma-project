@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { process_date_time } from "./utils";
+import { GET_USER_ID } from "./api_endpoints";
 
 interface PostProps {
   statusID: string;
@@ -8,26 +9,24 @@ interface PostProps {
   dateTimePosted: string;
 }
 
-interface UserProps {
+interface UserAPIProps {
   userID: string;
   nameHandle: string;
   nameDisplay: string;
 }
 
-// const GET_USER_LIST = "http://localhost:8000/api/get_user/";
-const GET_USER_SINGLE = "http://localhost:8000/api/get_user_id/";
-
 const Post = (props: PostProps): JSX.Element => {
-  const [authorInfo, setAuthorInfo] = useState<Array<UserProps>>([]);
+  const [authorInfo, setAuthorInfo] = useState<Array<UserAPIProps>>([]);
 
   // Fetch author info from server
   useEffect(() => {
-    fetch(`${GET_USER_SINGLE}${props.userID}/`)
-      .then((res) => {
-        return res.json();
-      })
+    fetch(`${GET_USER_ID}${props.userID}/`)
+      .then((res) => res.json())
       .then((data) => {
         setAuthorInfo(data);
+      })
+      .catch((error) => {
+        setAuthorInfo([]);
       });
   }, [props.userID]);
 
@@ -47,8 +46,9 @@ const Post = (props: PostProps): JSX.Element => {
         <div id="pfp-col" className="w-1/12"></div>
         <div id="right-col" className="flex-col w-11/12 space-y-0.5">
           <div>
-            <span>
-              {authorInfo[0].nameDisplay} @{authorInfo[0].nameHandle} ·{" "}
+            <span>{authorInfo[0].nameDisplay} </span>
+            <span className="text-neutral-500">
+              @{authorInfo[0].nameHandle} ·{" "}
               {process_date_time(props.dateTimePosted)}
             </span>
             <br />
