@@ -105,10 +105,9 @@ const Page2 = (): JSX.Element => {
         </div>
         {posts.map((entry) => (
           <Post
-            nameDisplay={"[blank name]"}
-            nameHandle={entry.userID}
-            date={"[blank]"}
-            postText={entry.text}
+            statusID={entry.statusID}
+            userID={entry.userID}
+            text={entry.text}
           />
         ))}
       </div>

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from .models import Status
-from .serializer import StatusSerializer
+from .models import Status, User
+from .serializer import StatusSerializer, UserSerializer
 import datetime
 
 from rest_framework import generics, permissions
@@ -17,6 +17,25 @@ class GetStatusView(generics.CreateAPIView):
   def get(self, request, format=None):
     serializer = StatusSerializer(Status.objects.all(), many=True)
     return Response(serializer.data)
+  
+class GetAllUserView(generics.CreateAPIView):
+  queryset = User.objects.all()
+  http_method_names = ['get']
+
+  def get(self, request, format=None):
+    serializer = UserSerializer(User.objects.all(), many=True)
+    return Response(serializer.data)
+  
+class GetOneUserView(generics.CreateAPIView):
+  queryset = User.objects.all()
+  http_method_names = ['get']
+
+  def get(self, request, userID, format=None):
+    try:
+      serializer = UserSerializer(User.objects.filter(userID=userID), many=True)
+      return Response(serializer.data)
+    except User.DoesNotExist:
+      return Response({'error': 'User not found'})
 
 # POST request
 class PostStatusView(generics.CreateAPIView):
