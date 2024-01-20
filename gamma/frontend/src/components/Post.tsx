@@ -44,8 +44,13 @@ const Post = (props: StatusAPIProps): JSX.Element => {
         <div id="right-col" className="flex-col w-11/12 space-y-0.5">
           <div>
             <Link to={`../${authorInfo.nameHandle}`}>
-              <span className="font-semibold">{authorInfo.nameDisplay} </span>
-              <span className="text-neutral-500">@{authorInfo.nameHandle}</span>
+              <span className="font-semibold decoration-1 hover:underline">
+                {authorInfo.nameDisplay}
+              </span>
+              <span className="text-neutral-500">
+                {" "}
+                @{authorInfo.nameHandle}
+              </span>
             </Link>
 
             <span className="text-neutral-500">

@@ -45,23 +45,24 @@ const Home = (): JSX.Element => {
   return (
     <PageWrapper>
       <div className="text-white">
-        <div className="flex border-b border-neutral-700 pl-4 py-3 w-5/12 bg-black fixed">
+        {/* <div className="flex border-b border-neutral-700 pl-4 py-3 w-5/12 bg-black fixed">
           <div className="block w-1/2 text-center">
             <span className="text-xl">Following</span>
           </div>
           <div className="block w-1/2 text-center">
             <span className="text-xl">For You</span>
           </div>
-        </div>
-        {/* TODO: replace same height hack to workaorund fixed position  */}
-        <div className="flex border-b border-neutral-700 pl-4 py-3 w-5/12 bg-black">
+        </div> */}
+        {/* TODO: replace same height hack to workaround fixed position  */}
+        {/* <div className="flex border-b border-neutral-700 pl-4 py-3 w-5/12 bg-black">
           <div className="block w-1/2 text-center">
             <span className="text-xl">Following</span>
           </div>
           <div className="block w-1/2 text-center">
             <span className="text-xl">For You</span>
           </div>
-        </div>
+        </div> */}
+        <div className="py-6 border-b border-neutral-700" />
         <div
           id="write-your-tweet"
           className="flex pt-2 pb-3 pr-3 border-b border-neutral-700"

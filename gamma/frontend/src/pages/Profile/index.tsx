@@ -64,7 +64,6 @@ const Profile = (): JSX.Element => {
       </PageWrapper>
     );
   }
-
   return (
     <PageWrapper>
       <div className="flex-col">
@@ -81,8 +80,14 @@ const Profile = (): JSX.Element => {
               <span className="text-neutral-500">@{userInfo.nameHandle}</span>
             </div>
             <div>
-              <span>{userInfo.bio}</span>
-              <br />
+              {userInfo.bio === "" ? (
+                <>
+                  <span>{userInfo.bio}</span>
+                  <br />
+                </>
+              ) : (
+                <></>
+              )}
               <span className="text-neutral-500">Joined January 2024</span>
               <br />
               <div className="flex space-x-3">
