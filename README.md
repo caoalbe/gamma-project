@@ -30,7 +30,6 @@ TODO frontend:
 
 TODO backend:
 
-- store media
 - prevent user handles matching route urls
 - automate datetime (status model)
 - add datetime joined field (user model)

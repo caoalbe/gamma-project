@@ -42,6 +42,8 @@ const Home = (): JSX.Element => {
     }
   }, [draftText]);
 
+  console.log(posts);
+
   return (
     <PageWrapper>
       <div className="text-white">

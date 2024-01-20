@@ -1,6 +1,10 @@
 import uuid
 from django.db import models
 
+# Media Stuff
+def upload_to(instaance, filename):
+  return 'images/{filename}'.format(filename=filename)
+
 # Create your models here.
 class User(models.Model):
   # is userID necessary is nameHandle is unique?
@@ -26,6 +30,7 @@ class Status(models.Model):
   )
   userID = models.ForeignKey(User, on_delete=models.CASCADE)
   text = models.CharField(max_length=280)
+  media1 = models.ImageField(upload_to=upload_to, default=None, blank=True, null=True)
   dateTimePosted = models.DateTimeField()
 
   def __str__(self):

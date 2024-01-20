@@ -59,3 +59,6 @@ class PostStatusView(generics.CreateAPIView):
       serializer.save()
       return Response(serializer.data)
     return Response(serializer.errors)
+
+  def perform_create(self, serializer):
+    serializer.save(creator=self.request.user)
