@@ -19,11 +19,22 @@ run the frontend:
 build:
 `npm run build` <-- same directory
 
-TODO:
+TODO frontend:
 
+- display media
 - css styling lookup table
-- account creation form
-- account sign in form
-- prevent user handles matching route urls
-- automate datetime in post creation
+- manage logged in user and use
+- this profile doesnt exist page
+- no posts recovered page
 - prettier 404 page
+
+TODO backend:
+
+- store media
+- prevent user handles matching route urls
+- automate datetime (status model)
+- add datetime joined field (user model)
+- implement liking to posts
+- implement bookmarks
+- implement replying to posts
+- implement qrts?
