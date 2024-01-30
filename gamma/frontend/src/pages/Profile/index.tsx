@@ -13,6 +13,8 @@ const MISSING_USER: UserAPIProps = {
   userID: "",
   nameHandle: "",
   nameDisplay: "",
+  pfp: "",
+  banner: "",
   bio: "",
 };
 
@@ -67,12 +69,36 @@ const Profile = (): JSX.Element => {
   return (
     <PageWrapper>
       <div className="flex-col">
+        <div className="border-b border-neutral-700 pl-6 py-1">
+          <span className="font-semibold text-xl">{userInfo.nameDisplay}</span>
+          <br />
+          <span className="text-neutral-500 text-sm/3">20.2K posts</span>
+        </div>
         <div
           id="profile-card"
           className="flex-col border-b border-neutral-700 pb-2"
         >
-          <div id="banner">banner</div>
-          <div id="pfp">pfp</div>
+          {userInfo.banner == null ? (
+            <div id="pfp" className="ml-4 mb-2 pt-2">
+              <img
+                src={userInfo.pfp}
+                className="aspect-square rounded-full w-3/12"
+                alt="pfp"
+              />
+            </div>
+          ) : (
+            <div id="banner" className="relative mb-16">
+              <img src={userInfo.banner} className=" " alt="banner" />
+              <div id="pfp" className="ml-4 absolute -bottom-14">
+                <img
+                  src={userInfo.pfp}
+                  className="aspect-square rounded-full w-4/12"
+                  alt="pfp"
+                />
+              </div>
+            </div>
+          )}
+
           <div id="info" className="pl-4 space-y-2">
             <div>
               <span className="font-bold text-xl">{userInfo.nameDisplay}</span>
@@ -108,6 +134,7 @@ const Profile = (): JSX.Element => {
             statusID={entry.statusID}
             userID={entry.userID}
             text={entry.text}
+            media1={entry.media1}
             dateTimePosted={entry.dateTimePosted}
           />
         ))}

@@ -16,6 +16,8 @@ class User(models.Model):
   )
   nameHandle = models.CharField(max_length=50, unique=True)
   nameDisplay = models.CharField(max_length=50)
+  pfp = models.ImageField(upload_to=upload_to, default=None, blank=True, null=True)
+  banner = models.ImageField(upload_to=upload_to, default=None, blank=True, null=True)
   bio = models.CharField(max_length=280, default=None, blank=True, null=True)
 
   def __str__(self):

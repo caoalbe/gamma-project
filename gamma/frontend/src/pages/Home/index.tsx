@@ -42,8 +42,6 @@ const Home = (): JSX.Element => {
     }
   }, [draftText]);
 
-  console.log(posts);
-
   return (
     <PageWrapper>
       <div className="text-white">
@@ -116,6 +114,7 @@ const Home = (): JSX.Element => {
             statusID={entry.statusID}
             userID={entry.userID}
             text={entry.text}
+            media1={entry.media1}
             dateTimePosted={entry.dateTimePosted}
           />
         ))}
