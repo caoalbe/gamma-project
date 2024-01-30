@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import Post from "../../components/Post";
 import PageWrapper from "../../components/PageWrapper";
 import {
@@ -6,6 +6,7 @@ import {
   CREATE_STATUS,
   StatusAPIProps,
 } from "../../components/api_endpoints";
+import { UserContext } from "../../UserContext";
 
 const minTextSize: number = 3;
 
@@ -13,6 +14,9 @@ const Home = (): JSX.Element => {
   const [posts, setPosts] = useState<StatusAPIProps[]>([]);
   const [draftText, setDraftText] = useState<string>("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const { user, setUser } = useContext(UserContext);
+  console.log(user);
 
   // Fetch posts from server
   useEffect(() => {
