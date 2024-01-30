@@ -82,17 +82,17 @@ const Profile = (): JSX.Element => {
             <div id="pfp" className="ml-4 mb-2 pt-2">
               <img
                 src={userInfo.pfp}
-                className="aspect-square rounded-full w-3/12"
+                className="aspect-square rounded-full w-3/12 border-4 border-black pointer-events-none"
                 alt="pfp"
               />
             </div>
           ) : (
             <div id="banner" className="relative mb-16">
               <img src={userInfo.banner} className=" " alt="banner" />
-              <div id="pfp" className="ml-4 absolute -bottom-14">
+              <div id="pfp" className="ml-4 absolute -bottom-14 w-3/12">
                 <img
                   src={userInfo.pfp}
-                  className="aspect-square rounded-full w-4/12"
+                  className="aspect-square rounded-full w-full border-4 border-black pointer-events-none"
                   alt="pfp"
                 />
               </div>
@@ -106,15 +106,17 @@ const Profile = (): JSX.Element => {
               <span className="text-neutral-500">@{userInfo.nameHandle}</span>
             </div>
             <div>
-              {userInfo.bio === "" ? (
+              {userInfo.bio === null ? (
+                <></>
+              ) : (
                 <>
                   <span>{userInfo.bio}</span>
                   <br />
                 </>
-              ) : (
-                <></>
               )}
-              <span className="text-neutral-500">Joined January 2024</span>
+              <span className="text-neutral-500 leading-10">
+                Joined January 2024
+              </span>
               <br />
               <div className="flex space-x-3">
                 <div>

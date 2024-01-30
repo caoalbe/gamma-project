@@ -21,7 +21,6 @@ build:
 
 TODO frontend:
 
-- display media
 - css styling lookup table
 - manage logged in user and use
 - this profile doesnt exist page

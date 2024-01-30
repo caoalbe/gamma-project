@@ -46,7 +46,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
           <Link to={`../${authorInfo.nameHandle}`}>
             <img
               src={authorInfo.pfp}
-              className="aspect-square rounded-full pointer-events-none"
+              className="aspect-square rounded-full"
               alt="pfp"
             />
           </Link>
@@ -75,7 +75,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
               <>
                 <img
                   src={props.media1}
-                  className="rounded-lg w-1/2"
+                  className="rounded-lg w-1/2 mt-2"
                   alt="media 1"
                 />
               </>
