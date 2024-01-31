@@ -11,12 +11,11 @@ import { UserContext } from "../../UserContext";
 const minTextSize: number = 3;
 
 const Home = (): JSX.Element => {
+  const { userHandle, setUserHandle } = useContext(UserContext);
+
   const [posts, setPosts] = useState<StatusAPIProps[]>([]);
   const [draftText, setDraftText] = useState<string>("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  const { user, setUser } = useContext(UserContext);
-  console.log(user);
 
   // Fetch posts from server
   useEffect(() => {

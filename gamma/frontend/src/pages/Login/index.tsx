@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import PageWrapper from "../../components/PageWrapper";
+import { UserContext } from "../../UserContext";
+import { GET_USER_ID } from "../../components/api_endpoints";
+import { login } from "../../components/utils";
 
 const Login = (): JSX.Element => {
-  const [loginName, setLoginName] = useState<string>();
-  const [loginPass, setLoginPass] = useState<string>();
+  const { userHandle, setUserHandle, userDisplay, setUserDisplay } =
+    useContext(UserContext);
 
-  const [createName, setCreateName] = useState<string>();
-  const [createPass, setCreatePass] = useState<string>();
+  // Form State
+  const [loginName, setLoginName] = useState<string>("");
+  const [loginPass, setLoginPass] = useState<string>("");
+
+  const [createName, setCreateName] = useState<string>("");
+  const [createPass, setCreatePass] = useState<string>("");
 
   return (
     <PageWrapper>
@@ -43,7 +50,19 @@ const Login = (): JSX.Element => {
                             px-5 py-1
                             bg-blue-400 hover:bg-blue-500 active:bg-blue-600"
           >
-            <button className="text-lg font-semibold select-none">Login</button>
+            <button
+              className="text-lg font-semibold select-none"
+              onClick={async () => {
+                const { handleName, displayName } = await login(
+                  loginName,
+                  loginPass
+                );
+                setUserHandle(handleName);
+                setUserDisplay(displayName);
+              }}
+            >
+              Login
+            </button>
           </div>
         </div>
         <div className="flex-col w-full py-4 border-b border-neutral-700 space-y-3">

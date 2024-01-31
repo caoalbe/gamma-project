@@ -5,8 +5,13 @@ import { UserContext } from "./UserContext";
 import { useState, useMemo } from "react";
 
 function App() {
-  const [user, setUser] = useState(null);
-  const value = useMemo(() => ({ user, setUser }), [user, setUser]);
+  const [userHandle, setUserHandle] = useState(null);
+  const [userDisplay, setUserDisplay] = useState(null);
+
+  const value = useMemo(
+    () => ({ userHandle, setUserHandle, userDisplay, setUserDisplay }),
+    [userHandle, setUserHandle, userDisplay, setUserDisplay]
+  );
 
   return (
     <>

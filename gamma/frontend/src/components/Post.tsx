@@ -3,6 +3,7 @@ import { process_date_time } from "./utils";
 import { GET_USER_ID, UserAPIProps, StatusAPIProps } from "./api_endpoints";
 import { Link } from "react-router-dom";
 
+// todo replace with nullable type?
 const MISSING_USER: UserAPIProps = {
   userID: "",
   nameHandle: "",

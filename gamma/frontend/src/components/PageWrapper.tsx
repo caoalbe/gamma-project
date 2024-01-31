@@ -1,48 +1,85 @@
 import { Link, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../UserContext";
 
 interface PageWrapperProps {
   children: JSX.Element;
 }
 
-const SideBarButtons = [
-  {
-    label: "Home",
-    path: "../home/",
-  },
-  {
-    label: "Profile",
-    path: "../zQwOW",
-  },
-  {
-    label: "Settings",
-    path: "../login",
-  },
-];
-
 const PageWrapper = (props: PageWrapperProps): JSX.Element => {
-  const { hash, pathname, search } = useLocation();
+  const { userHandle, userDisplay } = useContext(UserContext);
+  const { pathname } = useLocation();
+
+  const SideBarButtons = [
+    {
+      label: "Home",
+      path: "../home/",
+    },
+    {
+      label: "Profile",
+      path: userHandle === null ? "../login" : `../${userHandle}`,
+    },
+    {
+      label: "Settings",
+      path: "../settings",
+    },
+    {
+      label: "Login",
+      path: "../login",
+    },
+  ];
+
   return (
     <>
       <div className="flex bg-black">
         {/* left side bar */}
-        <div className="flex-col w-3/12 space-y-3 pt-3 pl-48 border-r border-neutral-700 h-dvh fixed">
-          {SideBarButtons.map((entry) => (
-            <div className="w-11/12 group">
-              <Link to={entry.path}>
-                <div className="w-min py-2 px-6 rounded-full group-hover:bg-zinc-900 duration-150">
-                  <span
-                    className={`text-white text-2xl ${
-                      ".." + pathname === entry.path
-                        ? "font-semibold"
-                        : "font-normal"
-                    }`}
-                  >
-                    {entry.label}
-                  </span>
+        <div className="flex-col w-3/12 pt-3 pl-48 border-r border-neutral-700 h-dvh fixed">
+          <div className="flex-col space-y-3">
+            {SideBarButtons.map((entry) => (
+              <div className="w-11/12 group">
+                <Link to={entry.path}>
+                  <div className="w-min py-2 px-6 rounded-full group-hover:bg-zinc-900 duration-150">
+                    <span
+                      className={`text-white text-2xl ${
+                        ".." + pathname === entry.path
+                          ? "font-semibold"
+                          : "font-normal"
+                      }`}
+                    >
+                      {entry.label}
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <div className="absolute bottom-0 left-0 pl-48 pr-2 mb-5 w-full">
+            {userHandle === null ? (
+              <>
+                <div className="group w-11/12">
+                  <Link to={"/login"}>
+                    <div className="mx-auto w-fit py-2 px-8 rounded-full text-center group-hover:bg-zinc-900 duration-150">
+                      <span className="text-white font-bold text-lg">
+                        Log In
+                      </span>
+                    </div>
+                  </Link>
                 </div>
-              </Link>
-            </div>
-          ))}
+              </>
+            ) : (
+              <>
+                <div className="flex py-1 rounded-full hover:bg-zinc-900 duration-150">
+                  <div id="pfp" className="w-2/12"></div>
+                  <div id="text" className="w-10/12">
+                    <span className="text-white font-bold">{userDisplay}</span>
+                    <br />
+                    <span className="text-neutral-500">@{userHandle}</span>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
         {/* TODO: replace same width hack to workaorund fixed position  */}
         <div

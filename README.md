@@ -22,7 +22,7 @@ build:
 TODO frontend:
 
 - css styling lookup table
-- manage logged in user and use
+- manage logged in user and use[prioprioprio]
 - this profile doesnt exist page
 - no posts recovered page
 - prettier 404 page

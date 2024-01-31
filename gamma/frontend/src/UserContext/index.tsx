@@ -1,8 +1,10 @@
-import { createContext } from "react";
+import { Dispatch, createContext } from "react";
 
 export interface UserContextType {
-  user: string;
-  setUser: React.SetStateAction<string>;
+  userHandle: string | null;
+  setUserHandle: Dispatch<React.SetStateAction<string | null>>;
+  userDisplay: string | null;
+  setUserDisplay: Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const UserContext = createContext<UserContextType>(

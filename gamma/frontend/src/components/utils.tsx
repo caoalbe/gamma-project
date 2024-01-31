@@ -45,3 +45,15 @@ export function process_date_time(input: string) {
     .toLocaleDateString(undefined, options)
     .replaceAll(" ", "-");
 }
+
+export const login = async (handle: string, password: string) => {
+  // todo: query server
+  // todo return image
+  if (handle === "testHandle") {
+    return { handleName: handle, displayName: "testDisplay" };
+  }
+  if (handle === "zQwOW") {
+    return { handleName: handle, displayName: "zQw" };
+  }
+  return { handleName: null, displayName: null };
+};
