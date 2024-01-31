@@ -25,6 +25,8 @@ TODO frontend:
 - action row
 - css styling lookup table
 - different screen sizes
+- make scrollbar consistent
+- replace 'React App' and atom icon in tab bar
 - this profile doesnt exist page
 - no posts recovered page
 - prettier 404 page
