@@ -37,6 +37,16 @@ class GetUserHandleView(generics.CreateAPIView):
     except User.DoesNotExist:
       return Response({'error': 'User not found'})
     
+class GetUserLoginView(generics.CreateAPIView):
+  queryset = User.objects.all()
+  http_method_names = ['get']
+
+  def get(self, request, nameHandle, password, format=None):
+    try:
+      serializer = UserSerializer(User.objects.filter(nameHandle=nameHandle, password=password), many=True)
+      return Response(serializer.data)
+    except User.DoesNotExist:
+      return Response({'error': 'User not found'})
 
 # Status(Tweets) Views
 class GetStatusView(generics.CreateAPIView):

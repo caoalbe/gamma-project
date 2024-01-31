@@ -5,6 +5,8 @@ export interface UserContextType {
   setUserHandle: Dispatch<React.SetStateAction<string | null>>;
   userDisplay: string | null;
   setUserDisplay: Dispatch<React.SetStateAction<string | null>>;
+  userPfp: string | null;
+  setUserPfp: Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const UserContext = createContext<UserContextType>(

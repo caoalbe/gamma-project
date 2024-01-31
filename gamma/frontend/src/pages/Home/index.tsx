@@ -11,7 +11,7 @@ import { UserContext } from "../../UserContext";
 const minTextSize: number = 3;
 
 const Home = (): JSX.Element => {
-  const { userHandle, setUserHandle } = useContext(UserContext);
+  const { userHandle, userDisplay } = useContext(UserContext);
 
   const [posts, setPosts] = useState<StatusAPIProps[]>([]);
   const [draftText, setDraftText] = useState<string>("");
@@ -92,7 +92,7 @@ const Home = (): JSX.Element => {
             >
               <button
                 onClick={() => {
-                  console.log("pressed!");
+                  console.log("tweeted!");
                   // fetch(CREATE_STATUS, {
                   //   method: "POST",
                   //   headers: { "Content-Type": "application/json" },

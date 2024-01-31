@@ -7,7 +7,7 @@ interface PageWrapperProps {
 }
 
 const PageWrapper = (props: PageWrapperProps): JSX.Element => {
-  const { userHandle, userDisplay } = useContext(UserContext);
+  const { userHandle, userDisplay, userPfp } = useContext(UserContext);
   const { pathname } = useLocation();
 
   const SideBarButtons = [
@@ -28,7 +28,6 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
       path: "../login",
     },
   ];
-
   return (
     <>
       <div className="flex bg-black">
@@ -70,9 +69,22 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
             ) : (
               <>
                 <div className="flex py-1 rounded-full hover:bg-zinc-900 duration-150">
-                  <div id="pfp" className="w-2/12"></div>
-                  <div id="text" className="w-10/12">
-                    <span className="text-white font-bold">{userDisplay}</span>
+                  <div id="pfp" className="w-3/12 p-2">
+                    {userPfp === null ? (
+                      <></>
+                    ) : (
+                      <img
+                        src={userPfp}
+                        className="aspect-square rounded-full"
+                        alt="pfp"
+                      />
+                    )}
+                  </div>
+                  <div
+                    id="text"
+                    className="w-9/12 mr-3 my-auto overflow-hidden text-clip whitespace-nowrap leading-tight"
+                  >
+                    <span className="text-white font-bold ">{userDisplay}</span>
                     <br />
                     <span className="text-neutral-500">@{userHandle}</span>
                   </div>

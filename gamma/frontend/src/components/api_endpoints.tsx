@@ -4,6 +4,7 @@ const SERVER_URL = "http://localhost:8000/api/";
 export const GET_USER_LIST = SERVER_URL + "get_user/"; // get all user data
 export const GET_USER_ID = SERVER_URL + "get_user_id/"; // get user data by ID
 export const GET_USER_HANDLE = SERVER_URL + "get_user_handle/"; // get user data by handle
+export const GET_USER_LOGIN = SERVER_URL + "get_user_login/"; // get user with matching handle and password
 
 // status model
 export const GET_STATUS = SERVER_URL + "get_status/"; // get all post data

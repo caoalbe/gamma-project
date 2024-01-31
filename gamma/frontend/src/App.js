@@ -7,10 +7,25 @@ import { useState, useMemo } from "react";
 function App() {
   const [userHandle, setUserHandle] = useState(null);
   const [userDisplay, setUserDisplay] = useState(null);
+  const [userPfp, setUserPfp] = useState(null);
 
   const value = useMemo(
-    () => ({ userHandle, setUserHandle, userDisplay, setUserDisplay }),
-    [userHandle, setUserHandle, userDisplay, setUserDisplay]
+    () => ({
+      userHandle,
+      setUserHandle,
+      userDisplay,
+      setUserDisplay,
+      userPfp,
+      setUserPfp,
+    }),
+    [
+      userHandle,
+      setUserHandle,
+      userDisplay,
+      setUserDisplay,
+      userPfp,
+      setUserPfp,
+    ]
   );
 
   return (
