@@ -21,8 +21,10 @@ build:
 
 TODO frontend:
 
+- rewrite api queries as functions which take parameters
+- action row
 - css styling lookup table
-- manage logged in user and use[prioprioprio]
+- different screen sizes
 - this profile doesnt exist page
 - no posts recovered page
 - prettier 404 page

@@ -7,11 +7,12 @@ import {
   StatusAPIProps,
 } from "../../components/api_endpoints";
 import { UserContext } from "../../UserContext";
+import { Link } from "react-router-dom";
 
 const minTextSize: number = 3;
 
 const Home = (): JSX.Element => {
-  const { userHandle, userDisplay } = useContext(UserContext);
+  const { userHandle, userPfp } = useContext(UserContext);
 
   const [posts, setPosts] = useState<StatusAPIProps[]>([]);
   const [draftText, setDraftText] = useState<string>("");
@@ -70,7 +71,19 @@ const Home = (): JSX.Element => {
           id="write-your-tweet"
           className="flex pt-2 pb-3 pr-3 border-b border-neutral-700"
         >
-          <div id="pfp-col" className="w-1/12"></div>
+          <div id="pfp-col" className="w-1/12">
+            {userHandle === null ? (
+              <></>
+            ) : (
+              <Link to={`../${userHandle}`}>
+                <img
+                  src={userPfp as string}
+                  className="aspect-square rounded-full p-1"
+                  alt="write-pfp"
+                />
+              </Link>
+            )}
+          </div>
           <div id="right-col" className="flex-col w-11/12 space-y-0.5">
             <div id="text-box">
               <textarea
