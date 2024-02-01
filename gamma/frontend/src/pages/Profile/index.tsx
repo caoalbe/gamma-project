@@ -1,22 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PageWrapper from "../../components/PageWrapper";
 import { useParams } from "react-router-dom";
 import {
   UserAPIProps,
   StatusAPIProps,
+  FollowingAPIProps,
   get_user_by_handle,
   get_post,
   get_follower,
   get_following,
 } from "../../components/api_endpoints";
 import Post from "../../components/Post";
+import { UserContext } from "../../UserContext";
 
 const Profile = (): JSX.Element => {
   const { nameHandle } = useParams();
+  const { userID } = useContext(UserContext);
   const [userInfo, setUserInfo] = useState<UserAPIProps | null>(null);
   const [userPosts, setUserPosts] = useState<StatusAPIProps[]>([]);
-  const [followers, setFollowers] = useState<UserAPIProps[]>([]);
-  const [following, setFollowing] = useState<UserAPIProps[]>([]);
+  const [followers, setFollowers] = useState<FollowingAPIProps[]>([]);
+  const [following, setFollowing] = useState<FollowingAPIProps[]>([]);
 
   // Fetch user info from server
   useEffect(() => {
@@ -47,12 +50,12 @@ const Profile = (): JSX.Element => {
     });
 
     // This user's followers
-    get_follower(userInfo.userID).then((result: UserAPIProps[]) => {
+    get_follower(userInfo.userID).then((result: FollowingAPIProps[]) => {
       setFollowers(result);
     });
 
     // This user's following
-    get_following(userInfo.userID).then((result: UserAPIProps[]) => {
+    get_following(userInfo.userID).then((result: FollowingAPIProps[]) => {
       setFollowing(result);
     });
   }, [userInfo]);
@@ -100,10 +103,28 @@ const Profile = (): JSX.Element => {
           )}
 
           <div id="info" className="pl-4 space-y-2">
-            <div>
-              <span className="font-bold text-xl">{userInfo.nameDisplay}</span>
-              <br />
-              <span className="text-neutral-500">@{userInfo.nameHandle}</span>
+            <div className="flex-col">
+              <div>
+                <span className="font-bold text-xl">
+                  {userInfo.nameDisplay}
+                </span>
+              </div>
+              <div className="flex space-x-2">
+                <div>
+                  <span className="text-neutral-500">
+                    @{userInfo.nameHandle}
+                  </span>
+                </div>
+                {following.some((user) => user.end === userID) ? (
+                  <div className="bg-neutral-800 rounded px-1 h-min my-auto leading-none">
+                    <span className="text-neutral-500 text-xs ">
+                      Follows You
+                    </span>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
             <div>
               {userInfo.bio === null ? (

@@ -48,6 +48,11 @@ export interface LikeAPIProps {
   viewerID: string;
 }
 
+export interface FollowingAPIProps {
+  start: string;
+  end: string;
+}
+
 // async functions to ping server
 function check_http(response: Response) {
   if (!response.ok) {
@@ -201,11 +206,14 @@ export const query_follow = async (
 };
 
 // get list of users that <start> is following
-export const get_following = async (start: string): Promise<UserAPIProps[]> => {
+export const get_following = async (
+  start: string
+): Promise<FollowingAPIProps[]> => {
   if (start === "") {
     return [];
   }
   try {
+    // this funciton returns wrong type of
     const res = await fetch(`${GET_FOLLOWING}/${start}/`)
       .then(check_http)
       .then((res) => res.json());
@@ -216,7 +224,9 @@ export const get_following = async (start: string): Promise<UserAPIProps[]> => {
 };
 
 // get list of users that follow <end>
-export const get_follower = async (end: string): Promise<UserAPIProps[]> => {
+export const get_follower = async (
+  end: string
+): Promise<FollowingAPIProps[]> => {
   if (end === "") {
     return [];
   }
