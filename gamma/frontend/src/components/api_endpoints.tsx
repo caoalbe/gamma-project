@@ -12,6 +12,9 @@ const GET_STATUS = SERVER_URL + "get_status"; // get all post data
 const CREATE_STATUS = SERVER_URL + "post_status"; // create a post
 
 // following model
+const GET_FOLLOWING_SINGLE = SERVER_URL + "get_following_single"; // check if a following exists
+const GET_FOLLOWING = SERVER_URL + "get_following"; // get list of following
+const GET_FOLLOWER = SERVER_URL + "get_follower"; // get list of followers
 
 // like model
 const GET_LIKE = SERVER_URL + "get_like"; // check if like exists
@@ -29,6 +32,7 @@ export interface UserAPIProps {
   pfp: string;
   banner: string;
   bio: string;
+  dateTimeJoined: string;
 }
 
 export interface StatusAPIProps {
@@ -177,6 +181,55 @@ export const post_status = async (
   }
 };
 
+// check if user <start> is following user <end>
+export const query_follow = async (
+  start: string,
+  end: string
+): Promise<boolean> => {
+  if (start === "" || end === "") {
+    return false;
+  }
+  try {
+    const res = await fetch(`${GET_FOLLOWING_SINGLE}/${start}/${end}/`)
+      .then(check_http)
+      .then((res) => res.json())
+      .then((res) => res.length > 0);
+    return res;
+  } catch (error) {
+    throw new Error(`error querying a following; ${error}`);
+  }
+};
+
+// get list of users that <start> is following
+export const get_following = async (start: string): Promise<UserAPIProps[]> => {
+  if (start === "") {
+    return [];
+  }
+  try {
+    const res = await fetch(`${GET_FOLLOWING}/${start}/`)
+      .then(check_http)
+      .then((res) => res.json());
+    return res;
+  } catch (error) {
+    throw new Error(`error fetching following list; ${error}`);
+  }
+};
+
+// get list of users that follow <end>
+export const get_follower = async (end: string): Promise<UserAPIProps[]> => {
+  if (end === "") {
+    return [];
+  }
+  try {
+    const res = await fetch(`${GET_FOLLOWER}/${end}/`)
+      .then(check_http)
+      .then((res) => res.json());
+    return res;
+  } catch (error) {
+    throw new Error(`error fetching follower list; ${error}`);
+  }
+};
+
 // check if like exists
 export const query_like = async (
   statusID: string,
@@ -186,7 +239,6 @@ export const query_like = async (
     return false;
   }
   try {
-    // await something
     const res = await fetch(`${GET_LIKE}/${statusID}/${userID}/`)
       .then(check_http)
       .then((res) => res.json())

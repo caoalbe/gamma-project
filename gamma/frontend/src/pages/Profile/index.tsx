@@ -6,37 +6,54 @@ import {
   StatusAPIProps,
   get_user_by_handle,
   get_post,
+  get_follower,
+  get_following,
 } from "../../components/api_endpoints";
 import Post from "../../components/Post";
 
 const Profile = (): JSX.Element => {
   const { nameHandle } = useParams();
   const [userInfo, setUserInfo] = useState<UserAPIProps | null>(null);
-  const [userPosts, setUserPosts] = useState<Array<StatusAPIProps>>([]);
+  const [userPosts, setUserPosts] = useState<StatusAPIProps[]>([]);
+  const [followers, setFollowers] = useState<UserAPIProps[]>([]);
+  const [following, setFollowing] = useState<UserAPIProps[]>([]);
 
   // Fetch user info from server
   useEffect(() => {
     if (nameHandle === undefined) {
       setUserInfo(null);
     }
-    get_user_by_handle(nameHandle as string).then((result) => {
-      console.log(result);
-      setUserInfo(result);
-    });
+    get_user_by_handle(nameHandle as string).then(
+      (result: UserAPIProps | null) => {
+        setUserInfo(result);
+      }
+    );
   }, [nameHandle]);
 
-  // Fetch user posts from server
+  // Fetch data from server
   useEffect(() => {
     if (userInfo === null) {
       return;
     }
-    get_post().then((result) => {
+
+    // This user's posts
+    get_post().then((result: StatusAPIProps[]) => {
       setUserPosts(
         // TODO: create endpoint to query status by nameHandle
         result.filter(
           (entry: StatusAPIProps) => entry.userID === userInfo.userID
         )
       );
+    });
+
+    // This user's followers
+    get_follower(userInfo.userID).then((result: UserAPIProps[]) => {
+      setFollowers(result);
+    });
+
+    // This user's following
+    get_following(userInfo.userID).then((result: UserAPIProps[]) => {
+      setFollowing(result);
     });
   }, [userInfo]);
 
@@ -53,7 +70,9 @@ const Profile = (): JSX.Element => {
         <div className="border-b border-neutral-700 pl-6 py-1">
           <span className="font-semibold text-xl">{userInfo.nameDisplay}</span>
           <br />
-          <span className="text-neutral-500 text-sm/3">20.2K posts</span>
+          <span className="text-neutral-500 text-sm/3">
+            {userPosts.length} posts
+          </span>
         </div>
         <div
           id="profile-card"
@@ -96,16 +115,23 @@ const Profile = (): JSX.Element => {
                 </>
               )}
               <span className="text-neutral-500 leading-10">
-                Joined January 2024
+                Joined{" "}
+                {new Date(userInfo.dateTimeJoined).toLocaleDateString(
+                  undefined,
+                  {
+                    year: "numeric" as const,
+                    month: "long" as const,
+                  }
+                )}
               </span>
               <br />
               <div className="flex space-x-3">
                 <div>
-                  <span className="font-bold text-sm">7 </span>
+                  <span className="font-bold text-sm">{following.length} </span>
                   <span className="text-neutral-500 text-sm">Following</span>
                 </div>
                 <div>
-                  <span className="font-bold text-sm">5 </span>
+                  <span className="font-bold text-sm">{followers.length} </span>
                   <span className="text-neutral-500 text-sm">Followers</span>
                 </div>
               </div>

@@ -4,7 +4,7 @@ from .models import Status, User, Following, Like
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model=User
-    fields=('userID', 'nameHandle', 'nameDisplay', 'pfp', 'banner', 'bio')
+    fields=('userID', 'nameHandle', 'nameDisplay', 'pfp', 'banner', 'bio', 'dateTimeJoined')
 
 
 class StatusSerializer(serializers.ModelSerializer):
