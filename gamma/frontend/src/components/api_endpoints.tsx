@@ -76,7 +76,7 @@ export const get_user_by_id = async (
       .then(check_http)
       .then((res) => res.json())
       .then((res) => {
-        if (res.length > 0) {
+        if (res.length > 1) {
           throw new Error(`userID ${userID} should be unique.`);
         }
         if (res.length === 0) {
@@ -102,7 +102,7 @@ export const get_user_by_handle = async (
       .then(check_http)
       .then((res) => res.json())
       .then((res) => {
-        if (res.length > 0) {
+        if (res.length > 1) {
           throw new Error(`userHandle ${userHandle} should be unique`);
         }
         if (res.length === 0) {
@@ -130,7 +130,7 @@ export const api_login = async (
       .then(check_http)
       .then((res) => res.json())
       .then((res) => {
-        if (res.length > 0) {
+        if (res.length > 1) {
           throw new Error("login should be unique");
         }
         if (res.length === 0) {
