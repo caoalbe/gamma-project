@@ -76,12 +76,36 @@ class PostStatusView(generics.CreateAPIView):
     serializer.save(creator=self.request.user)
 
 # Following Views
+class GetFollowingViewSingle(generics.CreateAPIView):
+  queryset = Following.objects.all()
+  http_method_names = ['get']
+
+  def get(self, request, start, end, format=None):
+    serializer = FollowingSerializer(Following.objects.all().filter(start=start, end=end), many=True)
+    return Response(serializer.data)
+  
+class GetFollowingView(generics.CreateAPIView):
+  queryset = Following.objects.all()
+  http_method_names = ['get']
+
+  def get(self, request, start, format=None):
+    serializer = FollowingSerializer(Following.objects.all().filter(start=start), many=True)
+    return Response(serializer.data)
+
+class GetFollowerView(generics.CreateAPIView):
+  queryset = Following.objects.all()
+  http_method_names = ['get']
+
+  def get(self, request, end, format=None):
+    serializer = FollowingSerializer(Following.objects.all().filter(end=end), many=True)
+    return Response(serializer.data)
+
 class PostFollowingView(generics.CreateAPIView):
   queryset = Following.objects.all()
   serializer_class = FollowingSerializer
   http_method_names = ['post']
 
-  def post(self, request, start, end, format=None):
+  def post(self, request, format=None):
     serializer = FollowingSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
@@ -96,9 +120,9 @@ class DeleteFollowingView(generics.DestroyAPIView):
   serializer_class = FollowingSerializer
   http_method_names = ['delete']
 
-  def delete(self, request, start, end, format=None):
+  def delete(self, request, format=None):
     try:
-      Following.objects.filter(start=uuid.UUID(start), end=uuid.UUID(end)).delete()
+      Following.objects.filter(start=uuid.UUID(request.data['start']), end=uuid.UUID(request.data['end'])).delete()
       return Response(status=204)
     except Following.DoesNotExist:
       return Response(status=404)
