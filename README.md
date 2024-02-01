@@ -21,12 +21,13 @@ build:
 
 TODO frontend:
 
-- rewrite api queries as functions which take parameters
 - action row
+- replace fake data (following/follower/post count, join date)
 - css styling lookup table
+- tweet hover colour
 - different screen sizes
-- make scrollbar consistent
 - replace 'React App' and atom icon in tab bar
+- make scrollbar consistent
 - this profile doesnt exist page
 - no posts recovered page
 - prettier 404 page
@@ -34,9 +35,6 @@ TODO frontend:
 TODO backend:
 
 - prevent user handles matching route urls
-- automate datetime (status model)
-- add datetime joined field (user model)
-- implement liking to posts
 - implement bookmarks
 - implement replying to posts
 - implement qrts?

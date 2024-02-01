@@ -103,6 +103,7 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
         <div className="w-5/12 text-white">{props.children}</div>
 
         {/* right side bar */}
+        {/* todo: sticky right sidebar */}
         <div className="w-4/12 text-white border-l border-neutral-700 flex-col space-y-4 pl-10 pt-4">
           <div className="w-8/12 bg-zinc-900 rounded-full py-2 pl-4">
             <span className="text-md text-neutral-500">Fake Search Bar</span>
@@ -112,7 +113,6 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
               <span className="text-xl  font-bold">What's happening</span>
             </div>
             {/* cards */}
-            {/* TODO: implement hover css */}
             <div className="flex pl-4 py-2 hover:bg-zinc-800 duration-200">
               <div id="text" className="w-9/12">
                 <span className="text-neutral-500 text-sm">
