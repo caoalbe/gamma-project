@@ -3,18 +3,8 @@ import { process_date_time } from "./utils";
 import { UserAPIProps, StatusAPIProps, get_user_by_id } from "./api_endpoints";
 import { Link } from "react-router-dom";
 
-// todo replace with nullable type?
-const MISSING_USER: UserAPIProps = {
-  userID: "",
-  nameHandle: "",
-  nameDisplay: "",
-  pfp: "",
-  banner: "",
-  bio: "",
-};
-
 const Post = (props: StatusAPIProps): JSX.Element => {
-  const [authorInfo, setAuthorInfo] = useState<UserAPIProps>(MISSING_USER);
+  const [authorInfo, setAuthorInfo] = useState<UserAPIProps | null>(null);
 
   // Fetch author info from server
   useEffect(() => {
@@ -23,7 +13,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
     });
   }, [props.userID]);
 
-  if (authorInfo === MISSING_USER) {
+  if (authorInfo === null) {
     return <></>;
   }
 

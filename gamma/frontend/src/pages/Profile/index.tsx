@@ -10,25 +10,29 @@ import {
 } from "../../components/api_endpoints";
 import Post from "../../components/Post";
 
-const MISSING_USER: UserAPIProps = {
-  userID: "",
-  nameHandle: "",
-  nameDisplay: "",
-  pfp: "",
-  banner: "",
-  bio: "",
-};
-
 const Profile = (): JSX.Element => {
   const { nameHandle } = useParams();
-  const [userInfo, setUserInfo] = useState<UserAPIProps>(MISSING_USER);
+  const [userInfo, setUserInfo] = useState<UserAPIProps | null>(null);
   const [userPosts, setUserPosts] = useState<Array<StatusAPIProps>>([]);
+
+  // Fetch user info from server
+  useEffect(() => {
+    if (nameHandle === undefined) {
+      setUserInfo(null);
+    }
+    get_user_by_handle(nameHandle as string).then((result) => {
+      setUserInfo(result);
+    });
+  }, [nameHandle]);
 
   // Fetch user posts from server
   useEffect(() => {
+    if (userInfo === null) {
+      return;
+    }
     get_post().then((result) => {
       setUserPosts(
-        // TODO: create endpoint to query by nameHandle
+        // TODO: create endpoint to query status by nameHandle
         result.filter(
           (entry: StatusAPIProps) => entry.userID === userInfo.userID
         )
@@ -36,17 +40,7 @@ const Profile = (): JSX.Element => {
     });
   }, [userInfo]);
 
-  // Fetch user info from server
-  useEffect(() => {
-    if (nameHandle === undefined) {
-      setUserInfo(MISSING_USER); // todo: replace this with proper nullable stuff
-    }
-    get_user_by_handle(nameHandle as string).then((result) => {
-      setUserInfo(result);
-    });
-  }, [nameHandle]);
-
-  if (userInfo === MISSING_USER) {
+  if (userInfo === null) {
     return (
       <PageWrapper>
         <></>
