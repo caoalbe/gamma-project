@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import {
   UserAPIProps,
   StatusAPIProps,
-  // GET_USER_HANDLE,
   get_user_by_handle,
   get_post,
 } from "../../components/api_endpoints";
