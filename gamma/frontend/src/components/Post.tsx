@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { process_date_time } from "./utils";
-import { GET_USER_ID, UserAPIProps, StatusAPIProps } from "./api_endpoints";
+import { UserAPIProps, StatusAPIProps, get_user_by_id } from "./api_endpoints";
 import { Link } from "react-router-dom";
 
 // todo replace with nullable type?
@@ -18,22 +18,9 @@ const Post = (props: StatusAPIProps): JSX.Element => {
 
   // Fetch author info from server
   useEffect(() => {
-    fetch(`${GET_USER_ID}${props.userID}/`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length > 1) {
-          throw new Error(
-            `User ID should be a unique primary key: ${props.userID}`
-          );
-        }
-        if (data.length === 0) {
-          setAuthorInfo(MISSING_USER);
-        }
-
-        if (data.length === 1) {
-          setAuthorInfo(data[0]);
-        }
-      });
+    get_user_by_id(props.userID).then((result) => {
+      setAuthorInfo(result);
+    });
   }, [props.userID]);
 
   if (authorInfo === MISSING_USER) {

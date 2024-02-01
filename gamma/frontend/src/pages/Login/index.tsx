@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
 import PageWrapper from "../../components/PageWrapper";
 import { UserContext } from "../../UserContext";
-import { login } from "../../components/utils";
+import { api_login } from "../../components/api_endpoints";
 import { useNavigate } from "react-router-dom";
 
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
-  const { setUserHandle, setUserDisplay, setUserPfp } = useContext(UserContext);
+  const { setUserID, setUserHandle, setUserDisplay, setUserPfp } =
+    useContext(UserContext);
 
   // Form State
   const [loginName, setLoginName] = useState<string>("");
@@ -52,20 +53,18 @@ const Login = (): JSX.Element => {
           >
             <button
               className="text-lg font-semibold select-none"
-              onClick={async () => {
-                const { handleName, displayName, pfp } = await login(
-                  loginName,
-                  loginPass
+              onClick={() => {
+                api_login(loginName, loginPass).then(
+                  ({ userID, nameHandle, nameDisplay, pfp }) => {
+                    setUserID(userID);
+                    setUserHandle(nameHandle);
+                    setUserDisplay(nameDisplay);
+                    setUserPfp(pfp);
+                    if (nameHandle !== null) {
+                      navigate("/home");
+                    }
+                  }
                 );
-                console.log(handleName);
-                console.log(pfp);
-                setUserHandle(handleName);
-                setUserDisplay(displayName);
-                setUserPfp(pfp);
-
-                if (handleName !== null) {
-                  navigate("/home");
-                }
               }}
             >
               Login

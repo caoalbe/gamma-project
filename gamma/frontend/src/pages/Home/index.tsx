@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Post from "../../components/Post";
 import PageWrapper from "../../components/PageWrapper";
 import {
-  GET_STATUS,
-  CREATE_STATUS,
   StatusAPIProps,
+  post_status,
+  get_post,
 } from "../../components/api_endpoints";
 import { UserContext } from "../../UserContext";
 import { Link } from "react-router-dom";
@@ -12,7 +13,8 @@ import { Link } from "react-router-dom";
 const minTextSize: number = 3;
 
 const Home = (): JSX.Element => {
-  const { userHandle, userPfp } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { userID, userHandle, userPfp } = useContext(UserContext);
 
   const [posts, setPosts] = useState<StatusAPIProps[]>([]);
   const [draftText, setDraftText] = useState<string>("");
@@ -20,15 +22,9 @@ const Home = (): JSX.Element => {
 
   // Fetch posts from server
   useEffect(() => {
-    fetch(GET_STATUS)
-      .then((res) => res.json())
-      .then((data) => {
-        setPosts(data);
-      })
-      .catch((error) => {
-        // probably network error
-        // TODO: create some flag for 'internet connection' error
-      });
+    get_post().then((result) => {
+      setPosts(result);
+    });
   }, []);
 
   // Resize the text area to create new post
@@ -105,18 +101,12 @@ const Home = (): JSX.Element => {
             >
               <button
                 onClick={() => {
-                  console.log("tweeted!");
-                  // fetch(CREATE_STATUS, {
-                  //   method: "POST",
-                  //   headers: { "Content-Type": "application/json" },
-                  //   body: JSON.stringify({
-                  //     nameDisplay: "display",
-                  //     nameHandle: "handle",
-                  //     postText: draftText,
-                  //     datePosted: "2024-01-10",
-                  //   }),
-                  // });
-                  setDraftText("");
+                  if (userID === null) {
+                    navigate("/login");
+                  } else {
+                    post_status(userID, draftText, null);
+                    setDraftText("");
+                  }
                 }}
                 className="text-lg font-semibold select-none"
               >

@@ -5,12 +5,15 @@ import { UserContext } from "./UserContext";
 import { useState, useMemo } from "react";
 
 function App() {
+  const [userID, setUserID] = useState(null);
   const [userHandle, setUserHandle] = useState(null);
   const [userDisplay, setUserDisplay] = useState(null);
   const [userPfp, setUserPfp] = useState(null);
 
   const value = useMemo(
     () => ({
+      userID,
+      setUserID,
       userHandle,
       setUserHandle,
       userDisplay,
@@ -19,6 +22,8 @@ function App() {
       setUserPfp,
     }),
     [
+      userID,
+      setUserID,
       userHandle,
       setUserHandle,
       userDisplay,

@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom";
 import {
   UserAPIProps,
   StatusAPIProps,
-  GET_USER_HANDLE,
-  GET_STATUS,
+  // GET_USER_HANDLE,
+  get_user_by_handle,
+  get_post,
 } from "../../components/api_endpoints";
 import Post from "../../components/Post";
 
@@ -25,38 +26,24 @@ const Profile = (): JSX.Element => {
 
   // Fetch user posts from server
   useEffect(() => {
-    fetch(`${GET_STATUS}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUserPosts(
-          // TODO: create endpoint to query by nameHandle
-          data.filter(
-            (entry: StatusAPIProps) => entry.userID === userInfo.userID
-          )
-        );
-      })
-      .catch((error) => {
-        setUserPosts([]);
-      });
+    get_post().then((result) => {
+      setUserPosts(
+        // TODO: create endpoint to query by nameHandle
+        result.filter(
+          (entry: StatusAPIProps) => entry.userID === userInfo.userID
+        )
+      );
+    });
   }, [userInfo]);
 
   // Fetch user info from server
   useEffect(() => {
-    fetch(`${GET_USER_HANDLE}${nameHandle}/`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length > 1) {
-          throw new Error(`User handle should be unique: ${nameHandle}`);
-        }
-
-        if (data.length === 0) {
-          setUserInfo(MISSING_USER);
-        }
-
-        if (data.length === 1) {
-          setUserInfo(data[0]);
-        }
-      });
+    if (nameHandle === undefined) {
+      setUserInfo(MISSING_USER); // todo: replace this with proper nullable stuff
+    }
+    get_user_by_handle(nameHandle as string).then((result) => {
+      setUserInfo(result);
+    });
   }, [nameHandle]);
 
   if (userInfo === MISSING_USER) {

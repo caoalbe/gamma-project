@@ -1,5 +1,3 @@
-import { GET_USER_LOGIN } from "../components/api_endpoints";
-
 const MILLISECONDS_IN_SECOND = 1_000;
 const SECONDS_IN_MINUTE = 60;
 const SECONDS_IN_HOUR = 3_600;
@@ -47,27 +45,3 @@ export function process_date_time(input: string) {
     .toLocaleDateString(undefined, options)
     .replaceAll(" ", "-");
 }
-
-export const login = async (handle: string, password: string) => {
-  let output = { handleName: null, displayName: null, pfp: null };
-
-  await fetch(`${GET_USER_LOGIN}${handle}/${password}/`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.length > 1) {
-        throw new Error(
-          `User handle should be a unique primary key: ${handle}`
-        );
-      }
-
-      if (data.length === 1) {
-        output = {
-          handleName: data[0].nameHandle,
-          displayName: data[0].nameDisplay,
-          pfp: data[0].pfp,
-        };
-      }
-    });
-
-  return output;
-};
