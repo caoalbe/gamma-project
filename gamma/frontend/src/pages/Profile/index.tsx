@@ -20,6 +20,7 @@ const Profile = (): JSX.Element => {
       setUserInfo(null);
     }
     get_user_by_handle(nameHandle as string).then((result) => {
+      console.log(result);
       setUserInfo(result);
     });
   }, [nameHandle]);

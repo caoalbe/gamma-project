@@ -47,29 +47,30 @@ const Login = (): JSX.Element => {
             />
           </div>
           <div
-            className="w-4/12 mx-auto text-center rounded-full
+            className="w-4/12 mx-auto text-center rounded-full select-none cursor-pointer
                             px-5 py-1
                             bg-blue-400 hover:bg-blue-500 active:bg-blue-600"
+            onClick={() => {
+              // if (loginName === "" || loginPass === "") {
+              //   return;
+              // }
+              api_login(loginName, loginPass).then((res) => {
+                // todo: handle bug with incorrect login properly
+                if (res === null) {
+                  return; // login failed
+                }
+                const { userID, nameHandle, nameDisplay, pfp } = res;
+                setUserID(userID);
+                setUserHandle(nameHandle);
+                setUserDisplay(nameDisplay);
+                setUserPfp(pfp);
+                if (nameHandle !== null) {
+                  navigate("/home");
+                }
+              });
+            }}
           >
-            <button
-              className="text-lg font-semibold select-none"
-              onClick={() => {
-                api_login(loginName, loginPass).then(
-                  ({ userID, nameHandle, nameDisplay, pfp }) => {
-                    // todo: handle bug with incorrect login properly
-                    setUserID(userID);
-                    setUserHandle(nameHandle);
-                    setUserDisplay(nameDisplay);
-                    setUserPfp(pfp);
-                    if (nameHandle !== null) {
-                      navigate("/home");
-                    }
-                  }
-                );
-              }}
-            >
-              Login
-            </button>
+            <span className="text-lg font-semibold">Login</span>
           </div>
         </div>
         <div className="flex-col w-full py-4 border-b border-neutral-700 space-y-3">

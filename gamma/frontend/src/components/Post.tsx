@@ -43,7 +43,10 @@ const Post = (props: StatusAPIProps): JSX.Element => {
 
   return (
     <>
-      <div id="ex-post" className="flex py-2 pr-3 border-b border-neutral-700">
+      <div
+        id="post"
+        className="flex py-2 pr-3 border-b border-neutral-700 hover:bg-zinc-950 duration-300"
+      >
         <div id="pfp-col" className="w-1/12 pl-2 pr-1">
           <Link to={`../${authorInfo.nameHandle}`}>
             <img

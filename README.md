@@ -21,16 +21,19 @@ build:
 
 TODO frontend:
 
-- action row
-- replace fake data (following/follower/post count, join date)
+- reply function
+- replace fake data (following/follower/post count and join date for user,like/reply count for post)
+- image upload
 - css styling lookup table
-- tweet hover colour
 - different screen sizes
 - replace 'React App' and atom icon in tab bar
 - make scrollbar consistent
+- edit profile page
+- settings page
 - this profile doesnt exist page
 - no posts recovered page
 - prettier 404 page
+- pattern match @<username> so that it links to /<username>
 
 TODO backend:
 

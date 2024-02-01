@@ -45,41 +45,74 @@ export interface LikeAPIProps {
 }
 
 // async functions to ping server
+function check_http(response: Response) {
+  if (!response.ok) {
+    throw new Error(`http error pinging server; ${response.status}`);
+  }
+  return response;
+}
+
 // get posts
 export const get_post = async (): Promise<StatusAPIProps[]> => {
   try {
-    const res = await fetch(`${GET_STATUS}/`);
-    return res.json();
+    const response = await fetch(`${GET_STATUS}/`)
+      .then(check_http)
+      .then((res) => res.json());
+    return response;
   } catch (error) {
-    throw new Error("http error fetching status database");
+    throw new Error(`http error fetching status database; ${error}`);
   }
 };
 
 // get user data by id
-export const get_user_by_id = async (userID: string): Promise<UserAPIProps> => {
+export const get_user_by_id = async (
+  userID: string
+): Promise<UserAPIProps | null> => {
+  if (userID === "") {
+    return null;
+  }
   try {
-    // todo: handle more than 1 returned user
     const res = await fetch(`${GET_USER_ID}/${userID}/`)
+      .then(check_http)
       .then((res) => res.json())
-      .then((res) => res[0]);
+      .then((res) => {
+        if (res.length > 0) {
+          throw new Error(`userID ${userID} should be unique.`);
+        }
+        if (res.length === 0) {
+          return null;
+        }
+        return res[0];
+      });
     return res;
   } catch (error) {
-    throw new Error("http error fetching user database by id");
+    throw new Error(`http error fetching user database by id; ${error}`);
   }
 };
 
 // get user data by handle
 export const get_user_by_handle = async (
   userHandle: string
-): Promise<UserAPIProps> => {
+): Promise<UserAPIProps | null> => {
+  if (userHandle === "") {
+    return null;
+  }
   try {
-    // todo: handle more than 1 returned user
     const res = await fetch(`${GET_USER_HANDLE}/${userHandle}/`)
+      .then(check_http)
       .then((res) => res.json())
-      .then((res) => res[0]);
+      .then((res) => {
+        if (res.length > 0) {
+          throw new Error(`userHandle ${userHandle} should be unique`);
+        }
+        if (res.length === 0) {
+          return null;
+        }
+        return res[0];
+      });
     return res;
   } catch (error) {
-    throw new Error("http error fetching user database by handle");
+    throw new Error(`http error fetching user database by handle; ${error}`);
   }
 };
 
@@ -88,29 +121,26 @@ export const get_user_by_handle = async (
 export const api_login = async (
   handle: string,
   password: string
-): Promise<UserAPIProps> => {
+): Promise<UserAPIProps | null> => {
   try {
-    // todo: handle more than 1 returned user
+    if (handle === "" || password === "") {
+      return null;
+    }
     const response = await fetch(`${GET_USER_LOGIN}/${handle}/${password}/`)
+      .then(check_http)
       .then((res) => res.json())
       .then((res) => {
-        if (res.length === 0) {
-          return {
-            userId: null,
-            nameHandle: null,
-            nameDisplay: null,
-            pfp: null,
-            banner: null,
-            bio: null,
-          };
-        } else {
-          return res[0];
+        if (res.length > 0) {
+          throw new Error("login should be unique");
         }
+        if (res.length === 0) {
+          return null;
+        }
+        return res[0];
       });
     return response;
   } catch (error) {
-    console.log("what error", error);
-    throw new Error("error logging in");
+    throw new Error(`error logging in; ${error}`);
   }
 };
 
@@ -119,7 +149,7 @@ export const post_status = async (
   userID: string,
   text: string,
   media1: string | null
-) => {
+): Promise<void> => {
   try {
     if (media1 === null) {
       await fetch(`${CREATE_STATUS}/`, {
@@ -143,7 +173,7 @@ export const post_status = async (
       });
     }
   } catch (error) {
-    throw new Error("error creating status");
+    throw new Error(`error creating status; ${error}`);
   }
 };
 
@@ -152,19 +182,26 @@ export const query_like = async (
   statusID: string,
   userID: string
 ): Promise<boolean> => {
+  if (statusID === "" || userID === "") {
+    return false;
+  }
   try {
     // await something
     const res = await fetch(`${GET_LIKE}/${statusID}/${userID}/`)
+      .then(check_http)
       .then((res) => res.json())
       .then((res) => res.length > 0);
     return res;
   } catch (error) {
-    throw new Error("error querying a like");
+    throw new Error(`error querying a like; ${error}`);
   }
 };
 
 // create new like
-export const post_like = async (statusID: string, userID: string) => {
+export const post_like = async (
+  statusID: string,
+  userID: string
+): Promise<void> => {
   try {
     await fetch(`${CREATE_LIKE}/`, {
       method: "POST",
@@ -175,12 +212,15 @@ export const post_like = async (statusID: string, userID: string) => {
       }),
     });
   } catch (error) {
-    throw new Error("error liking a status");
+    throw new Error(`error liking a status; ${error}`);
   }
 };
 
 // delete a like
-export const delete_like = async (statusID: string, userID: string) => {
+export const delete_like = async (
+  statusID: string,
+  userID: string
+): Promise<void> => {
   try {
     await fetch(`${DELETE_LIKE}/`, {
       method: "DELETE",
@@ -191,7 +231,6 @@ export const delete_like = async (statusID: string, userID: string) => {
       }),
     });
   } catch (error) {
-    console.log(error);
-    throw new Error("error deleting a like");
+    throw new Error(`error deleting a like; ${error}`);
   }
 };
