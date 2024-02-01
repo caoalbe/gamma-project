@@ -3,6 +3,7 @@ from .models import Status, User, Following, Like
 from .serializer import StatusSerializer, UserSerializer, FollowingSerializer, LikeSerializer
 
 from rest_framework import generics, permissions
+import uuid
 
 # Create your views here.
 # todo: figure out how to fold these classes together
@@ -74,7 +75,7 @@ class PostStatusView(generics.CreateAPIView):
   def perform_create(self, serializer):
     serializer.save(creator=self.request.user)
 
-# Post Views
+# Following Views
 class PostFollowingView(generics.CreateAPIView):
   queryset = Following.objects.all()
   serializer_class = FollowingSerializer
@@ -89,6 +90,18 @@ class PostFollowingView(generics.CreateAPIView):
   
   def perform_create(self, serializer):
     serializer.save(creator=self.request.user)
+
+class DeleteFollowingView(generics.DestroyAPIView):
+  queryset = Following.objects.all()
+  serializer_class = FollowingSerializer
+  http_method_names = ['delete']
+
+  def delete(self, request, start, end, format=None):
+    try:
+      Following.objects.filter(start=uuid.UUID(start), end=uuid.UUID(end)).delete()
+      return Response(status=204)
+    except Following.DoesNotExist:
+      return Response(status=404)
 
 # Like Views
 class PostLikeView(generics.CreateAPIView):
@@ -105,3 +118,15 @@ class PostLikeView(generics.CreateAPIView):
   
   def perform_create(self, serializer):
     serializer.save(creator=self.request.user)
+
+class DeleteLikeView(generics.DestroyAPIView):
+  queryset = Like.objects.all()
+  serializer_class = LikeSerializer
+  http_method_names = ['delete']
+
+  def delete(self, request, statusID, viewerID, format=None):
+    try:
+      Like.objects.filter(statusID=uuid.UUID(statusID), viewerID=uuid.UUID(viewerID)).delete()
+      return Response(status=204)
+    except Like.DoesNotExist:
+      return Response(status=404)
