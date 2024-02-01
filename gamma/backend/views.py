@@ -1,10 +1,11 @@
 from rest_framework.response import Response
-from .models import Status, User
-from .serializer import StatusSerializer, UserSerializer
+from .models import Status, User, Following, Like
+from .serializer import StatusSerializer, UserSerializer, FollowingSerializer, LikeSerializer
 
 from rest_framework import generics, permissions
 
 # Create your views here.
+# todo: figure out how to fold these classes together
 
 # User Views
 class GetAllUserView(generics.CreateAPIView):
@@ -70,5 +71,37 @@ class PostStatusView(generics.CreateAPIView):
       return Response(serializer.data)
     return Response(serializer.errors)
 
+  def perform_create(self, serializer):
+    serializer.save(creator=self.request.user)
+
+# Post Views
+class PostFollowingView(generics.CreateAPIView):
+  queryset = Following.objects.all()
+  serializer_class = FollowingSerializer
+  http_method_names = ['post']
+
+  def post(self, request, start, end, format=None):
+    serializer = FollowingSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors)
+  
+  def perform_create(self, serializer):
+    serializer.save(creator=self.request.user)
+
+# Like Views
+class PostLikeView(generics.CreateAPIView):
+  queryset = Like.objects.all()
+  serializer_class = LikeSerializer
+  http_method_names = ['post']
+
+  def post(self, request, statusID, viewerID, format=None):
+    serializer = LikeSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors)
+  
   def perform_create(self, serializer):
     serializer.save(creator=self.request.user)

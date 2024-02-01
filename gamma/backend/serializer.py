@@ -1,8 +1,5 @@
 from rest_framework import serializers
-from .models import Status, User
-
-
-
+from .models import Status, User, Following, Like
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
@@ -17,3 +14,13 @@ class StatusSerializer(serializers.ModelSerializer):
   class Meta:
     model=Status
     fields=('statusID', 'userID', 'text', 'media1', 'dateTimePosted')
+
+class FollowingSerializer(serializers.ModelSerializer):
+  class Meta:
+    model=Following
+    fields=('start', 'end')
+
+class LikeSerializer(serializers.ModelSerializer):
+  class Meta:
+    model=Like
+    fields=('statusID', 'viewerID')

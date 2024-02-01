@@ -7,5 +7,7 @@ urlpatterns = [
   path('get_user/', views.GetAllUserView.as_view(), name='user-list'),
   path('get_user_id/<str:userID>/', views.GetUserIDView.as_view(), name='user-ID'),
   path('get_user_handle/<str:nameHandle>/', views.GetUserHandleView.as_view(), name='user-Handle'),
-  path('get_user_login/<str:nameHandle>/<str:password>/', views.GetUserLoginView.as_view(), name='user-login')
+  path('get_user_login/<str:nameHandle>/<str:password>/', views.GetUserLoginView.as_view(), name='user-login'),
+  path('post_following/<str:start>/<str:end>/', views.PostFollowingView.as_view(), name='following-create'),
+  path('post_like/<str:statusID>/<str:viewerID>/', views.PostLikeView.as_view(), name='like-create')
 ]

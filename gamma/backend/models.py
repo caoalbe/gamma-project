@@ -45,11 +45,11 @@ class Following(models.Model):
   end = models.ForeignKey(User, related_name='end', on_delete=models.CASCADE)
 
   def __str__(self):
-    return self.start + " -> " + self.end
+    return str(self.start) + " -> " + str(self.end)
 
 class Like(models.Model):
   statusID = models.ForeignKey(Status, on_delete=models.CASCADE)
   viewerID = models.ForeignKey(User, on_delete=models.CASCADE)
 
   def __str__(self):
-    return self.viewerID + " likes " + self.statusID
+    return str(self.viewerID) + " likes " + str(self.statusID)
