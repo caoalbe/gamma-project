@@ -10,7 +10,8 @@ urlpatterns = [
   path('get_user_login/<str:nameHandle>/<str:password>/', views.GetUserLoginView.as_view(), name='user-login'),
   path('post_following/<str:start>/<str:end>/', views.PostFollowingView.as_view(), name='following-create'),
   path('delete_following/<str:start>/<str:end>/', views.DeleteFollowingView.as_view(), name='following-delete'),
-  path('post_like/<str:statusID>/<str:viewerID>/', views.PostLikeView.as_view(), name='like-create'),
-  path('delete_like/<str:statusID>/<str:viewerID>/', views.DeleteLikeView.as_view(), name='like-delete')
+  path('get_like/<str:statusID>/<str:viewerID>/', views.GetLikeView.as_view(), name='like-get'),
+  path('post_like/', views.PostLikeView.as_view(), name='like-create'),
+  path('delete_like/', views.DeleteLikeView.as_view(), name='like-delete')
 ]
 

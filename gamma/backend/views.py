@@ -45,7 +45,7 @@ class GetUserLoginView(generics.CreateAPIView):
 
   def get(self, request, nameHandle, password, format=None):
     try:
-      serializer = UserSerializer(User.objects.filter(nameHandle=nameHandle, password=password), many=True)
+      serializer = UserSerializer(User.objects.filter(nameHandle=nameHandle, password=password), many=True)    
       return Response(serializer.data)
     except User.DoesNotExist:
       return Response({'error': 'User not found'})
@@ -104,12 +104,20 @@ class DeleteFollowingView(generics.DestroyAPIView):
       return Response(status=404)
 
 # Like Views
+class GetLikeView(generics.CreateAPIView):
+  queryset = Like.objects.all()
+  http_method_names = ['get']
+
+  def get(self, request, statusID, viewerID, format=None):
+    serializer = LikeSerializer(Like.objects.all().filter(statusID=statusID, viewerID=viewerID), many=True)
+    return Response(serializer.data)
+
 class PostLikeView(generics.CreateAPIView):
   queryset = Like.objects.all()
   serializer_class = LikeSerializer
   http_method_names = ['post']
 
-  def post(self, request, statusID, viewerID, format=None):
+  def post(self, request, format=None):
     serializer = LikeSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
@@ -124,9 +132,9 @@ class DeleteLikeView(generics.DestroyAPIView):
   serializer_class = LikeSerializer
   http_method_names = ['delete']
 
-  def delete(self, request, statusID, viewerID, format=None):
+  def delete(self, request, format=None):
     try:
-      Like.objects.filter(statusID=uuid.UUID(statusID), viewerID=uuid.UUID(viewerID)).delete()
+      Like.objects.filter(statusID=uuid.UUID(request.data['statusID']), viewerID=uuid.UUID(request.data['viewerID'])).delete()
       return Response(status=204)
     except Like.DoesNotExist:
       return Response(status=404)

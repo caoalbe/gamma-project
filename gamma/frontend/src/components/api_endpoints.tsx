@@ -11,6 +11,13 @@ const GET_USER_LOGIN = SERVER_URL + "get_user_login"; // get user with matching 
 const GET_STATUS = SERVER_URL + "get_status"; // get all post data
 const CREATE_STATUS = SERVER_URL + "post_status"; // create a post
 
+// following model
+
+// like model
+const GET_LIKE = SERVER_URL + "get_like"; // check if like exists
+const CREATE_LIKE = SERVER_URL + "post_like"; // like a status
+const DELETE_LIKE = SERVER_URL + "delete_like"; // unlike a status
+
 // media stuff
 const GET_MEDIA = SERVER_URL;
 
@@ -30,6 +37,11 @@ export interface StatusAPIProps {
   text: string;
   media1: string;
   dateTimePosted: string;
+}
+
+export interface LikeAPIProps {
+  statusID: string;
+  viewerID: string;
 }
 
 // async functions to ping server
@@ -79,11 +91,25 @@ export const api_login = async (
 ): Promise<UserAPIProps> => {
   try {
     // todo: handle more than 1 returned user
-    const res = await fetch(`${GET_USER_LOGIN}/${handle}/${password}/`)
+    const response = await fetch(`${GET_USER_LOGIN}/${handle}/${password}/`)
       .then((res) => res.json())
-      .then((res) => res[0]);
-    return res;
+      .then((res) => {
+        if (res.length === 0) {
+          return {
+            userId: null,
+            nameHandle: null,
+            nameDisplay: null,
+            pfp: null,
+            banner: null,
+            bio: null,
+          };
+        } else {
+          return res[0];
+        }
+      });
+    return response;
   } catch (error) {
+    console.log("what error", error);
     throw new Error("error logging in");
   }
 };
@@ -94,25 +120,78 @@ export const post_status = async (
   text: string,
   media1: string | null
 ) => {
-  if (media1 === null) {
-    await fetch(`${CREATE_STATUS}/`, {
+  try {
+    if (media1 === null) {
+      await fetch(`${CREATE_STATUS}/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userID: userID,
+          text: text,
+          // media1: null, // just leave empty instead of specifying null
+        }),
+      });
+    } else {
+      await fetch(`${CREATE_STATUS}/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userID: userID,
+          text: text,
+          media1: media1,
+        }),
+      });
+    }
+  } catch (error) {
+    throw new Error("error creating status");
+  }
+};
+
+// check if like exists
+export const query_like = async (
+  statusID: string,
+  userID: string
+): Promise<boolean> => {
+  try {
+    // await something
+    const res = await fetch(`${GET_LIKE}/${statusID}/${userID}/`)
+      .then((res) => res.json())
+      .then((res) => res.length > 0);
+    return res;
+  } catch (error) {
+    throw new Error("error querying a like");
+  }
+};
+
+// create new like
+export const post_like = async (statusID: string, userID: string) => {
+  try {
+    await fetch(`${CREATE_LIKE}/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userID: userID,
-        text: text,
-        // media1: null, // just leave empty instead of specifying null
+        statusID: statusID,
+        viewerID: userID,
       }),
     });
-  } else {
-    await fetch(`${CREATE_STATUS}/`, {
-      method: "POST",
+  } catch (error) {
+    throw new Error("error liking a status");
+  }
+};
+
+// delete a like
+export const delete_like = async (statusID: string, userID: string) => {
+  try {
+    await fetch(`${DELETE_LIKE}/`, {
+      method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userID: userID,
-        text: text,
-        media1: media1,
+        statusID: statusID,
+        viewerID: userID,
       }),
     });
+  } catch (error) {
+    console.log(error);
+    throw new Error("error deleting a like");
   }
 };

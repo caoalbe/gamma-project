@@ -56,6 +56,7 @@ const Login = (): JSX.Element => {
               onClick={() => {
                 api_login(loginName, loginPass).then(
                   ({ userID, nameHandle, nameDisplay, pfp }) => {
+                    // todo: handle bug with incorrect login properly
                     setUserID(userID);
                     setUserHandle(nameHandle);
                     setUserDisplay(nameDisplay);
