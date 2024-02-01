@@ -51,9 +51,6 @@ const Login = (): JSX.Element => {
                             px-5 py-1
                             bg-blue-400 hover:bg-blue-500 active:bg-blue-600"
             onClick={() => {
-              // if (loginName === "" || loginPass === "") {
-              //   return;
-              // }
               api_login(loginName, loginPass).then((res) => {
                 // todo: handle bug with incorrect login properly
                 if (res === null) {

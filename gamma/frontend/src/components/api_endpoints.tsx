@@ -15,6 +15,8 @@ const CREATE_STATUS = SERVER_URL + "post_status"; // create a post
 const GET_FOLLOWING_SINGLE = SERVER_URL + "get_following_single"; // check if a following exists
 const GET_FOLLOWING = SERVER_URL + "get_following"; // get list of following
 const GET_FOLLOWER = SERVER_URL + "get_follower"; // get list of followers
+const POST_FOLLOWING = SERVER_URL + "post_following"; // follow a user
+const DELETE_FOLLOWING = SERVER_URL + "delete_following"; // unfollow a user
 
 // like model
 const GET_LIKE = SERVER_URL + "get_like"; // check if like exists
@@ -237,6 +239,44 @@ export const get_follower = async (
     return res;
   } catch (error) {
     throw new Error(`error fetching follower list; ${error}`);
+  }
+};
+
+// post a new following
+export const post_follow = async (
+  start: string,
+  end: string
+): Promise<void> => {
+  try {
+    await fetch(`${POST_FOLLOWING}/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        start: start,
+        end: end,
+      }),
+    });
+  } catch (error) {
+    throw new Error(`error following an account; ${error}`);
+  }
+};
+
+// delete a following
+export const delete_follow = async (
+  start: string,
+  end: string
+): Promise<void> => {
+  try {
+    await fetch(`${DELETE_FOLLOWING}/`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        start: start,
+        end: end,
+      }),
+    });
+  } catch (error) {
+    throw new Error(`error unfollowing an account; ${error}`);
   }
 };
 

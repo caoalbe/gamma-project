@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import PageWrapper from "../../components/PageWrapper";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   UserAPIProps,
   StatusAPIProps,
@@ -9,17 +9,22 @@ import {
   get_post,
   get_follower,
   get_following,
+  post_follow,
+  delete_follow,
 } from "../../components/api_endpoints";
 import Post from "../../components/Post";
 import { UserContext } from "../../UserContext";
 
 const Profile = (): JSX.Element => {
+  const navigate = useNavigate();
   const { nameHandle } = useParams();
   const { userID } = useContext(UserContext);
   const [userInfo, setUserInfo] = useState<UserAPIProps | null>(null);
   const [userPosts, setUserPosts] = useState<StatusAPIProps[]>([]);
   const [followers, setFollowers] = useState<FollowingAPIProps[]>([]);
   const [following, setFollowing] = useState<FollowingAPIProps[]>([]);
+  const [userFollows, setUserFollow] = useState<boolean>(false); // true iff <userID> follows <userInfo.userID>
+  const [unfollowHover, setUnfollowHover] = useState<boolean>(false); // true when mouse is hover the unfollow button
 
   // Fetch user info from server
   useEffect(() => {
@@ -52,13 +57,14 @@ const Profile = (): JSX.Element => {
     // This user's followers
     get_follower(userInfo.userID).then((result: FollowingAPIProps[]) => {
       setFollowers(result);
+      setUserFollow(followers.some((user) => user.start === userID));
     });
 
     // This user's following
     get_following(userInfo.userID).then((result: FollowingAPIProps[]) => {
       setFollowing(result);
     });
-  }, [userInfo]);
+  }, [followers, userID, userInfo]);
 
   if (userInfo === null) {
     return (
@@ -103,29 +109,73 @@ const Profile = (): JSX.Element => {
           )}
 
           <div id="info" className="pl-4 space-y-2">
-            <div className="flex-col">
-              <div>
-                <span className="font-bold text-xl">
-                  {userInfo.nameDisplay}
-                </span>
-              </div>
-              <div className="flex space-x-2">
-                <div>
-                  <span className="text-neutral-500">
-                    @{userInfo.nameHandle}
-                  </span>
-                </div>
-                {following.some((user) => user.end === userID) ? (
-                  <div className="bg-neutral-800 rounded px-1 h-min my-auto leading-none">
-                    <span className="text-neutral-500 text-xs ">
-                      Follows You
+            <div className="flex">
+              <div id="names" className="flex-col">
+                <div id="display" className="flex">
+                  <div>
+                    <span className="font-bold text-xl">
+                      {userInfo.nameDisplay}
                     </span>
                   </div>
-                ) : (
-                  <></>
-                )}
+                </div>
+                <div id="handle" className="flex space-x-2">
+                  <div>
+                    <span className="text-neutral-500">
+                      @{userInfo.nameHandle}
+                    </span>
+                  </div>
+                  {following.some((user) => user.end === userID) ? (
+                    <div className="bg-neutral-800 rounded px-1 h-min my-auto leading-none">
+                      <span className="text-neutral-500 text-xs ">
+                        Follows You
+                      </span>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
+              {userID === null || !userFollows ? (
+                <div
+                  id="follow"
+                  className="ml-auto my-auto mr-4 w-2/12 px-3 py-1 
+                                    border rounded-full text-center text-lg text-black font-bold
+                                    bg-white hover:bg-slate-100
+                                    cursor-pointer select-none"
+                  onClick={() => {
+                    setUserFollow(true);
+                    if (userID === null) {
+                      // redirect
+                      navigate("/login");
+                    }
+                    post_follow(userID as string, userInfo.userID);
+                  }}
+                >
+                  Follow
+                </div>
+              ) : (
+                <div
+                  id="unfollow"
+                  className="ml-auto my-auto mr-4 w-2/12 px-3 py-1 
+                                    rounded-full text-center text-lg font-bold
+                                    border rounded-full hover:text-red-600 hover:border-red-600 
+                                    cursor-pointer select-none"
+                  onPointerOver={() => {
+                    setUnfollowHover(true);
+                  }}
+                  onPointerOut={() => {
+                    setUnfollowHover(false);
+                  }}
+                  onClick={() => {
+                    setUserFollow(false);
+                    delete_follow(userID, userInfo.userID);
+                  }}
+                >
+                  {unfollowHover ? "Unfollow" : "Following"}
+                </div>
+              )}
             </div>
+
             <div>
               {userInfo.bio === null ? (
                 <></>

@@ -22,10 +22,10 @@ build:
 TODO frontend:
 
 - reply function
-- replace fake data (following/follower/post count and join date for user,like/reply count for post)
+- replace fake data (like/reply count for post)
 - image upload
 - css styling lookup table
-- different screen sizes
+- different screen sizes (use absolute sizes i think)
 - replace 'React App' and atom icon in tab bar
 - make scrollbar consistent
 - edit profile page
