@@ -30,7 +30,10 @@ const Login = (): JSX.Element => {
             <input
               placeholder="Username"
               value={loginName}
-              onChange={(e) => setLoginName(e.target.value)}
+              onChange={(e) => {
+                setLoginName(e.target.value);
+                setLoginFailed(false);
+              }}
               className="block w-9/12 bg-zinc-900 rounded-full mx-auto
                               py-1.5 pl-4 pr-8 text-xl text-white
                               placeholder:text-neutral-500 focus:outline-0"
@@ -41,7 +44,10 @@ const Login = (): JSX.Element => {
               placeholder="Password"
               type="password"
               value={loginPass}
-              onChange={(e) => setLoginPass(e.target.value)}
+              onChange={(e) => {
+                setLoginPass(e.target.value);
+                setLoginFailed(false);
+              }}
               className="block w-9/12 bg-zinc-900 rounded-full mx-auto
                               py-1.5 pl-4 pr-8 text-xl text-white
                               placeholder:text-neutral-500 focus:outline-0"
@@ -71,8 +77,8 @@ const Login = (): JSX.Element => {
             <span className="text-lg font-semibold">Login</span>
           </div>
           <div className="text-center">
-            <span className="text-red-500">
-              {loginFailed ? "login failed" : "_"}
+            <span className={`text-red-500 ${loginFailed ? "" : "invisible"}`}>
+              login failed
             </span>
           </div>
         </div>
