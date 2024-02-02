@@ -27,9 +27,10 @@ TODO frontend:
 - css styling lookup table
 - different screen sizes (use absolute sizes i think)
 - replace 'React App' and atom icon in tab bar
-- make scrollbar consistent
+- auto place new tweet on timeline when posted
 - edit profile page
 - settings page
+- make scrollbar consistent
 - this profile doesnt exist page
 - no posts recovered page
 - prettier 404 page

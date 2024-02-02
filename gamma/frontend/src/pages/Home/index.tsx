@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from "react";
+import { useEffect, useState, useRef, useContext, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Post from "../../components/Post";
 import PageWrapper from "../../components/PageWrapper";
@@ -19,6 +19,9 @@ const Home = (): JSX.Element => {
   const [posts, setPosts] = useState<StatusAPIProps[]>([]);
   const [draftText, setDraftText] = useState<string>("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const mediaInputRef = useRef<HTMLInputElement>(null);
+  const [media1, setMedia1] = useState<File | null>(null);
 
   // Fetch posts from server
   useEffect(() => {
@@ -41,6 +44,15 @@ const Home = (): JSX.Element => {
       textAreaRef.current.rows = Math.max(minTextSize, newLineCount);
     }
   }, [draftText]);
+
+  // const handleButtonClick = () => {
+  //   mediaInputRef.current.click();
+  // };
+
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setMedia1(file);
+  // };
 
   return (
     <PageWrapper>
@@ -93,13 +105,33 @@ const Home = (): JSX.Element => {
                 rows={minTextSize}
               />
             </div>
-            <div
-              id="actions"
-              className="w-fit ml-auto text-center rounded-full
-                            mr-2 px-5 py-1
-                            bg-blue-400 hover:bg-blue-500 active:bg-blue-600"
-            >
-              <button
+            <div id="actions" className="flex border-t pt-3 border-neutral-700">
+              <div
+                className="border-2  rounded px-1 py-auto leading-8
+                  select-none cursor-pointer
+                  border-blue-400 hover:border-blue-500 active:border-blue-600"
+                onClick={() => {
+                  console.log("uploading img");
+                }}
+              >
+                <input
+                  type="file"
+                  ref={mediaInputRef}
+                  className="hidden"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setMedia1(e.target.files?.[0] || null);
+                  }}
+                />
+                <span
+                  onClick={() => {
+                    mediaInputRef.current?.click();
+                  }}
+                  className="text-xl leading-none"
+                >
+                  📸
+                </span>
+              </div>
+              <div
                 onClick={() => {
                   if (userID === null) {
                     navigate("/login");
@@ -108,10 +140,13 @@ const Home = (): JSX.Element => {
                     setDraftText("");
                   }
                 }}
-                className="text-lg font-semibold select-none"
+                className="w-fit ml-auto text-center rounded-full
+                            mr-2 px-5 py-1
+                            bg-blue-400 hover:bg-blue-500 active:bg-blue-600
+                            text-lg font-semibold select-none cursor-pointer"
               >
                 Post
-              </button>
+              </div>
             </div>
           </div>
         </div>
