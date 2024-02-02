@@ -45,15 +45,6 @@ const Home = (): JSX.Element => {
     }
   }, [draftText]);
 
-  // const handleButtonClick = () => {
-  //   mediaInputRef.current.click();
-  // };
-
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setMedia1(file);
-  // };
-
   return (
     <PageWrapper>
       <div className="text-white">
@@ -110,9 +101,6 @@ const Home = (): JSX.Element => {
                 className="border-2  rounded px-1 py-auto leading-8
                   select-none cursor-pointer
                   border-blue-400 hover:border-blue-500 active:border-blue-600"
-                onClick={() => {
-                  console.log("uploading img");
-                }}
               >
                 <input
                   type="file"
@@ -136,8 +124,9 @@ const Home = (): JSX.Element => {
                   if (userID === null) {
                     navigate("/login");
                   } else {
-                    post_status(userID, draftText, null);
+                    post_status(userID, draftText, media1);
                     setDraftText("");
+                    setMedia1(null);
                   }
                 }}
                 className="w-fit ml-auto text-center rounded-full

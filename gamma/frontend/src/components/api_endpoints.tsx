@@ -160,30 +160,24 @@ export const api_login = async (
 export const post_status = async (
   userID: string,
   text: string,
-  media1: string | null
+  media1: File | null
 ): Promise<void> => {
+  if (userID === null || text === null) {
+    return;
+  }
+
   try {
-    if (media1 === null) {
-      await fetch(`${CREATE_STATUS}/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userID: userID,
-          text: text,
-          // media1: null, // just leave empty instead of specifying null
-        }),
-      });
-    } else {
-      await fetch(`${CREATE_STATUS}/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userID: userID,
-          text: text,
-          media1: media1,
-        }),
-      });
+    const formData = new FormData();
+    formData.append("userID", userID);
+    formData.append("text", text);
+    if (media1 !== null) {
+      formData.append("media1", media1);
     }
+
+    await fetch(`${CREATE_STATUS}/`, {
+      method: "POST",
+      body: formData,
+    });
   } catch (error) {
     throw new Error(`error creating status; ${error}`);
   }
