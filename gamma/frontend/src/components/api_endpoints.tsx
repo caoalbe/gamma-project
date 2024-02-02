@@ -42,7 +42,7 @@ export interface StatusAPIProps {
   statusID: string;
   userID: string;
   text: string;
-  media1: string;
+  media1: string | null;
   dateTimePosted: string;
 }
 

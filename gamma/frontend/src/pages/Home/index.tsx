@@ -153,6 +153,16 @@ const Home = (): JSX.Element => {
                     navigate("/login");
                   } else {
                     post_status(userID, draftText, media1);
+                    setPosts([
+                      {
+                        statusID: "",
+                        userID: userID,
+                        text: draftText,
+                        media1: previewMedia1,
+                        dateTimePosted: new Date().toString(),
+                      },
+                      ...posts,
+                    ]);
                     setDraftText("");
                     setMedia1(null);
                   }

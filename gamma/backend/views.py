@@ -56,7 +56,7 @@ class GetStatusView(generics.CreateAPIView):
   http_method_names = ['get']
 
   def get(self, request, format=None):
-    serializer = StatusSerializer(Status.objects.all(), many=True)
+    serializer = StatusSerializer(Status.objects.all().order_by('-dateTimePosted'), many=True)
     return Response(serializer.data)
   
 class PostStatusView(generics.CreateAPIView):
