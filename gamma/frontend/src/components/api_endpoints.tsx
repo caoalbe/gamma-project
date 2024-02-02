@@ -20,6 +20,7 @@ const DELETE_FOLLOWING = SERVER_URL + "delete_following"; // unfollow a user
 
 // like model
 const GET_LIKE = SERVER_URL + "get_like"; // check if like exists
+const GET_LIKE_STATUS = SERVER_URL + "get_like_status";
 const CREATE_LIKE = SERVER_URL + "post_like"; // like a status
 const DELETE_LIKE = SERVER_URL + "delete_like"; // unlike a status
 
@@ -296,6 +297,23 @@ export const query_like = async (
     return res;
   } catch (error) {
     throw new Error(`error querying a like; ${error}`);
+  }
+};
+
+// get all likes for some status
+export const get_like_by_status = async (
+  statusID: string
+): Promise<LikeAPIProps[]> => {
+  if (statusID === "") {
+    return [];
+  }
+  try {
+    const res = await fetch(`${GET_LIKE_STATUS}/${statusID}/`)
+      .then(check_http)
+      .then((res) => res.json());
+    return res;
+  } catch (error) {
+    throw new Error(`error getting likes for status; ${error}`);
   }
 };
 

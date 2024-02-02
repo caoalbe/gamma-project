@@ -136,6 +136,14 @@ class GetLikeView(generics.CreateAPIView):
     serializer = LikeSerializer(Like.objects.all().filter(statusID=statusID, viewerID=viewerID), many=True)
     return Response(serializer.data)
 
+class GetLikeStatusView(generics.CreateAPIView):
+  queryset = Like.objects.all()
+  http_method_names = ['get']
+
+  def get(self, request, statusID, format=None):
+    serializer = LikeSerializer(Like.objects.all().filter(statusID=statusID), many=True)
+    return Response(serializer.data)
+
 class PostLikeView(generics.CreateAPIView):
   queryset = Like.objects.all()
   serializer_class = LikeSerializer

@@ -21,9 +21,9 @@ build:
 
 TODO frontend:
 
-- reply function
-- replace fake data (like/reply count for post)
 - image upload
+- reply function
+- replace fake data (reply count for post)
 - css styling lookup table
 - different screen sizes (use absolute sizes i think)
 - replace 'React App' and atom icon in tab bar

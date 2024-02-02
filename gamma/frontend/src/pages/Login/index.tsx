@@ -12,6 +12,7 @@ const Login = (): JSX.Element => {
   // Form State
   const [loginName, setLoginName] = useState<string>("");
   const [loginPass, setLoginPass] = useState<string>("");
+  const [loginFailed, setLoginFailed] = useState<boolean>(false);
 
   const [createName, setCreateName] = useState<string>("");
   const [createPass, setCreatePass] = useState<string>("");
@@ -52,8 +53,8 @@ const Login = (): JSX.Element => {
                             bg-blue-400 hover:bg-blue-500 active:bg-blue-600"
             onClick={() => {
               api_login(loginName, loginPass).then((res) => {
-                // todo: handle bug with incorrect login properly
                 if (res === null) {
+                  setLoginFailed(true);
                   return; // login failed
                 }
                 const { userID, nameHandle, nameDisplay, pfp } = res;
@@ -68,6 +69,11 @@ const Login = (): JSX.Element => {
             }}
           >
             <span className="text-lg font-semibold">Login</span>
+          </div>
+          <div className="text-center">
+            <span className="text-red-500">
+              {loginFailed ? "login failed" : "_"}
+            </span>
           </div>
         </div>
         <div className="flex-col w-full py-4 border-b border-neutral-700 space-y-3">

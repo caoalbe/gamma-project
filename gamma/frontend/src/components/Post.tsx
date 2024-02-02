@@ -7,6 +7,7 @@ import {
   query_like,
   post_like,
   delete_like,
+  get_like_by_status,
 } from "./api_endpoints";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
@@ -19,6 +20,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
   const [likeHovered, setLikeHovered] = useState<boolean>(false);
   const [userLikes, setUserLikes] = useState<boolean>(false);
   const [replyHovered, setReplyHovered] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState<number>(-1);
 
   // Fetch author info from server
   useEffect(() => {
@@ -36,6 +38,12 @@ const Post = (props: StatusAPIProps): JSX.Element => {
       setUserLikes(res);
     });
   }, [props.statusID, userID]);
+
+  useEffect(() => {
+    get_like_by_status(props.statusID).then((res) => {
+      setLikeCount(res.length);
+    });
+  }, [props.statusID]);
 
   if (authorInfo === null) {
     return <></>;
@@ -88,7 +96,9 @@ const Post = (props: StatusAPIProps): JSX.Element => {
           </div>
           <div id="actions" className="flex">
             <div
-              className="flex select-none px-5 mr-10 text-neutral-500 hover:text-red-500"
+              className={`flex select-none px-5 mr-10 ${
+                userLikes ? "text-red-500" : "text-neutral-500"
+              } hover:text-red-500 cursor-pointer`}
               onClick={() => {
                 if (userID === null) {
                   navigate("/login");
@@ -99,10 +109,12 @@ const Post = (props: StatusAPIProps): JSX.Element => {
                   // unlike post
                   delete_like(props.statusID, userID);
                   setUserLikes(false);
+                  setLikeCount(likeCount - 1);
                 } else {
+                  // like post
                   post_like(props.statusID, userID);
                   setUserLikes(true);
-                  // like post
+                  setLikeCount(likeCount + 1);
                 }
               }}
               onPointerOver={() => {
@@ -115,10 +127,10 @@ const Post = (props: StatusAPIProps): JSX.Element => {
               <span className="text-xl">
                 {likeHovered || userLikes ? "💗" : "💙"}
               </span>
-              <span className="leading-loose text-sm">1738</span>
+              <span className="leading-loose text-sm">{likeCount}</span>
             </div>
             <div
-              className="flex select-none px-5 mr-10 text-neutral-500 hover:text-blue-500"
+              className="flex select-none px-5 mr-10 text-neutral-500 hover:text-blue-500 cursor-pointer"
               onClick={() => {
                 console.log("replied!");
               }}
@@ -130,7 +142,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
               }}
             >
               <span className="text-xl">{replyHovered ? "💬" : "💭"}</span>
-              <span className="leading-loose text-sm">679</span>
+              <span className="leading-loose text-sm">0</span>
             </div>
           </div>
         </div>

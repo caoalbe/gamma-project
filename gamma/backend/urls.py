@@ -14,6 +14,7 @@ urlpatterns = [
   path('post_following/', views.PostFollowingView.as_view(), name='following-create'),
   path('delete_following/', views.DeleteFollowingView.as_view(), name='following-delete'),
   path('get_like/<str:statusID>/<str:viewerID>/', views.GetLikeView.as_view(), name='like-get'),
+  path('get_like_status/<str:statusID>/', views.GetLikeStatusView.as_view(), name='like-status'),
   path('post_like/', views.PostLikeView.as_view(), name='like-create'),
   path('delete_like/', views.DeleteLikeView.as_view(), name='like-delete')
 ]
