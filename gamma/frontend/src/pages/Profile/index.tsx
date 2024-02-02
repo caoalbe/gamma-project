@@ -64,7 +64,7 @@ const Profile = (): JSX.Element => {
     get_following(userInfo.userID).then((result: FollowingAPIProps[]) => {
       setFollowing(result);
     });
-  }, [userID]);
+  }, [followers, userID, userInfo]);
 
   if (userInfo === null) {
     return (

@@ -39,7 +39,7 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
                 <Link to={entry.path}>
                   <div className="w-min py-2 px-6 rounded-full group-hover:bg-zinc-900 duration-150">
                     <span
-                      className={`text-white text-2xl ${
+                      className={`text-white text-2xl select-none ${
                         ".." + pathname === entry.path
                           ? "font-semibold"
                           : "font-normal"
