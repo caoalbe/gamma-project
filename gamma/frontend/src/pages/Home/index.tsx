@@ -22,6 +22,7 @@ const Home = (): JSX.Element => {
 
   const mediaInputRef = useRef<HTMLInputElement>(null);
   const [media1, setMedia1] = useState<File | null>(null);
+  const [previewMedia1, setPreviewMedia1] = useState<string | null>(null);
 
   // Fetch posts from server
   useEffect(() => {
@@ -96,6 +97,22 @@ const Home = (): JSX.Element => {
                 rows={minTextSize}
               />
             </div>
+            {previewMedia1 === null ? (
+              <></>
+            ) : (
+              <div className="mb-2">
+                <img
+                  src={previewMedia1}
+                  className="rounded-lg w-1/2 pb-2 cursor-pointer"
+                  // todo: move this into a dedicated 'x' button
+                  onClick={() => {
+                    setMedia1(null);
+                    setPreviewMedia1(null);
+                  }}
+                  alt="pfp"
+                />
+              </div>
+            )}
             <div id="actions" className="flex border-t pt-3 border-neutral-700">
               <div
                 className="border-2  rounded px-1 py-auto leading-8
@@ -107,7 +124,18 @@ const Home = (): JSX.Element => {
                   ref={mediaInputRef}
                   className="hidden"
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setMedia1(e.target.files?.[0] || null);
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setMedia1(file);
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setPreviewMedia1(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    } else {
+                      setMedia1(null);
+                      setPreviewMedia1(null);
+                    }
                   }}
                 />
                 <span
