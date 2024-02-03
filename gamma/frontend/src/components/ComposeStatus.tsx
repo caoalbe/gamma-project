@@ -1,19 +1,30 @@
-import { useEffect, useRef } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../UserContext";
+import { post_status } from "../components/api_endpoints";
 
 interface ComposeStatusProps {
+  className?: string;
   placeholder?: string;
-  text: string;
-  setText: React.Dispatch<React.SetStateAction<string>>;
+  minLineCount?: number;
 }
 
-const minLineCount = 3;
-
 const ComposeStatus = ({
+  className = "flex-col bg-inherit space-y-0.5",
   placeholder = "",
-  text,
-  setText,
+  minLineCount = 1,
 }: ComposeStatusProps): JSX.Element => {
+  const navigate = useNavigate();
+  const { userID } = useContext(UserContext);
+
+  // Status Text
+  const [text, setText] = useState<string>("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Status Media
+  const [media1, setMedia1] = useState<File | null>(null);
+  const [previewMedia1, setPreviewMedia1] = useState<string | null>(null);
+  const mediaInputRef = useRef<HTMLInputElement>(null);
 
   // Resize the text area to create new post
   useEffect(() => {
@@ -28,20 +39,112 @@ const ComposeStatus = ({
 
       textAreaRef.current.rows = Math.max(minLineCount, newLineCount);
     }
-  }, [text]);
+  }, [minLineCount, text]);
 
   return (
-    <div id="text-box">
-      <textarea
-        placeholder={placeholder}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        ref={textAreaRef}
-        className="block w-full bg-black resize-none
-                              py-1.5 pl-2 pr-8 text-xl text-white
-                              placeholder:text-neutral-500 focus:outline-0"
-        rows={minLineCount}
-      />
+    <div className={className}>
+      <div id="typing-input">
+        <textarea
+          placeholder={placeholder}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          ref={textAreaRef}
+          className={`block w-full bg-inherit resize-none
+                  py-1.5 pl-2 pr-8 text-xl text-white
+                  placeholder:text-neutral-500 focus:outline-0
+                  `}
+          rows={minLineCount}
+        />
+      </div>
+      <div id="preview-images">
+        {previewMedia1 === null ? (
+          <></>
+        ) : (
+          <img
+            src={previewMedia1}
+            className="rounded-lg w-1/2 cursor-pointer"
+            // todo: move this into a dedicated 'x' button
+            onClick={() => {
+              setMedia1(null);
+              setPreviewMedia1(null);
+            }}
+            alt="pfp"
+          />
+        )}
+      </div>
+      <div id="actions" className="flex pt-3 border-neutral-700">
+        <div
+          id="image-upload"
+          className="border-2 rounded px-1 py-auto leading-8
+                      select-none cursor-pointer
+                      border-blue-400 hover:border-blue-500 active:border-blue-600"
+        >
+          <input
+            type="file"
+            ref={mediaInputRef}
+            className="hidden"
+            // onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setMedia1(file);
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setPreviewMedia1(reader.result as string);
+                };
+                reader.readAsDataURL(file);
+              } else {
+                setMedia1(null);
+                setPreviewMedia1(null);
+              }
+            }}
+          />
+          <span
+            onClick={() => {
+              mediaInputRef.current?.click();
+            }}
+            className="text-xl leading-none"
+          >
+            📸
+          </span>
+        </div>
+        <div
+          onClick={() => {
+            if (text === "") {
+              return;
+            }
+            if (userID === null) {
+              navigate("/login");
+              return;
+            }
+
+            post_status(userID as string, text, media1);
+            // setPosts([
+            //   {
+            //     statusID: "",
+            //     userID: userID,
+            //     text: draftText,
+            //     media1: previewMedia1,
+            //     dateTimePosted: new Date().toString(),
+            //   },
+            //   ...posts,
+            // ]);
+            setText("");
+            setMedia1(null);
+          }}
+          id="post-status"
+          className={`w-fit ml-auto text-center rounded-full
+                      mr-2 px-5 py-1
+                      ${
+                        text === ""
+                          ? "bg-sky-800 text-gray-500"
+                          : "bg-sky-500 hover:bg-sky-600 active:bg-sky-700 cursor-pointer"
+                      }
+                      text-lg font-semibold select-none `}
+        >
+          Post
+        </div>
+      </div>
     </div>
   );
 };

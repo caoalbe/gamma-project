@@ -11,16 +11,22 @@ import {
 } from "./api_endpoints";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
+import ComposeStatus from "../components/ComposeStatus";
 
 const Post = (props: StatusAPIProps): JSX.Element => {
   const navigate = useNavigate();
   const { userID } = useContext(UserContext);
   const [authorInfo, setAuthorInfo] = useState<UserAPIProps | null>(null);
 
+  // Likes
   const [likeHovered, setLikeHovered] = useState<boolean>(false);
   const [userLikes, setUserLikes] = useState<boolean>(false);
-  const [replyHovered, setReplyHovered] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(-1);
+
+  // Replies
+  const [replyHovered, setReplyHovered] = useState<boolean>(false);
+  const [replyOpened, setReplyOpened] = useState<boolean>(false);
+  const [draftText, setDraftText] = useState<string>("");
 
   // Fetch author info from server
   useEffect(() => {
@@ -130,9 +136,11 @@ const Post = (props: StatusAPIProps): JSX.Element => {
               <span className="leading-loose text-sm">{likeCount}</span>
             </div>
             <div
-              className="flex select-none px-5 mr-10 text-neutral-500 hover:text-blue-500 cursor-pointer"
+              className={`flex select-none px-5 mr-10 ${
+                replyOpened ? "text-blue-500" : "text-neutral-500"
+              } hover:text-blue-500 cursor-pointer`}
               onClick={() => {
-                console.log("replied!");
+                setReplyOpened(!replyOpened);
               }}
               onPointerOver={() => {
                 setReplyHovered(true);
@@ -141,10 +149,19 @@ const Post = (props: StatusAPIProps): JSX.Element => {
                 setReplyHovered(false);
               }}
             >
-              <span className="text-xl">{replyHovered ? "💬" : "💭"}</span>
+              <span className="text-xl">
+                {replyOpened || replyHovered ? "💬" : "💭"}
+              </span>
               <span className="leading-loose text-sm">0</span>
             </div>
           </div>
+          {replyOpened ? (
+            <div className="">
+              <ComposeStatus placeholder="Post your reply!" />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </>
