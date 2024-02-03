@@ -140,7 +140,7 @@ const ComposeStatus = ({
           className={`w-fit ml-auto text-center rounded-full
                       mr-2 px-5 py-1
                       ${
-                        text === ""
+                        text === "" && media1 === null
                           ? "bg-sky-800 text-gray-500"
                           : "bg-sky-500 hover:bg-sky-600 active:bg-sky-700 cursor-pointer"
                       }
