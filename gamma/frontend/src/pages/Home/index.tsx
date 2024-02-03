@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useContext, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Post from "../../components/Post";
 import PageWrapper from "../../components/PageWrapper";
+import ComposeStatus from "../../components/ComposeStatus";
 import {
   StatusAPIProps,
   post_status,
@@ -10,15 +11,12 @@ import {
 import { UserContext } from "../../UserContext";
 import { Link } from "react-router-dom";
 
-const minTextSize: number = 3;
-
 const Home = (): JSX.Element => {
   const navigate = useNavigate();
   const { userID, userHandle, userPfp } = useContext(UserContext);
 
   const [posts, setPosts] = useState<StatusAPIProps[]>([]);
   const [draftText, setDraftText] = useState<string>("");
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const mediaInputRef = useRef<HTMLInputElement>(null);
   const [media1, setMedia1] = useState<File | null>(null);
@@ -31,41 +29,9 @@ const Home = (): JSX.Element => {
     });
   }, []);
 
-  // Resize the text area to create new post
-  useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.rows = 1;
-      const lineHeight = parseInt(
-        getComputedStyle(textAreaRef.current).lineHeight,
-        10
-      );
-      const newLineCount =
-        Math.ceil(textAreaRef.current.scrollHeight / lineHeight) - 1;
-
-      textAreaRef.current.rows = Math.max(minTextSize, newLineCount);
-    }
-  }, [draftText]);
-
   return (
     <PageWrapper>
       <div className="text-white">
-        {/* <div className="flex border-b border-neutral-700 pl-4 py-3 w-5/12 bg-black fixed">
-          <div className="block w-1/2 text-center">
-            <span className="text-xl">Following</span>
-          </div>
-          <div className="block w-1/2 text-center">
-            <span className="text-xl">For You</span>
-          </div>
-        </div> */}
-        {/* TODO: replace same height hack to workaround fixed position  */}
-        {/* <div className="flex border-b border-neutral-700 pl-4 py-3 w-5/12 bg-black">
-          <div className="block w-1/2 text-center">
-            <span className="text-xl">Following</span>
-          </div>
-          <div className="block w-1/2 text-center">
-            <span className="text-xl">For You</span>
-          </div>
-        </div> */}
         <div className="py-6 border-b border-neutral-700" />
         <div
           id="write-your-tweet"
@@ -85,18 +51,11 @@ const Home = (): JSX.Element => {
             )}
           </div>
           <div id="right-col" className="flex-col w-11/12 space-y-0.5">
-            <div id="text-box">
-              <textarea
-                placeholder="What is happening?!"
-                value={draftText}
-                onChange={(e) => setDraftText(e.target.value)}
-                ref={textAreaRef}
-                className="block w-full bg-black resize-none
-                              py-1.5 pl-2 pr-8 text-xl text-white
-                              placeholder:text-neutral-500 focus:outline-0"
-                rows={minTextSize}
-              />
-            </div>
+            <ComposeStatus
+              placeholder="What is happening?!"
+              text={draftText}
+              setText={setDraftText}
+            />
             {previewMedia1 === null ? (
               <></>
             ) : (

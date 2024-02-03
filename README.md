@@ -28,7 +28,9 @@ TODO frontend:
 - replace 'React App' and atom icon in tab bar
 - edit profile page
 - settings page
+- dedicated status page
 - make scrollbar consistent
+- enforce character limit on frontend
 - this profile doesnt exist page
 - no posts recovered page
 - prettier 404 page
