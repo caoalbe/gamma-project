@@ -1,17 +1,21 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import { post_status } from "../components/api_endpoints";
+import { StatusAPIProps, post_status } from "../components/api_endpoints";
 
 interface ComposeStatusProps {
   className?: string;
   placeholder?: string;
+  buttonText?: string;
+  callbackFunction?: (createdPost: StatusAPIProps) => void;
   minLineCount?: number;
 }
 
 const ComposeStatus = ({
   className = "flex-col bg-inherit space-y-0.5",
   placeholder = "",
+  buttonText = "",
+  callbackFunction = () => {},
   minLineCount = 1,
 }: ComposeStatusProps): JSX.Element => {
   const navigate = useNavigate();
@@ -118,17 +122,17 @@ const ComposeStatus = ({
               return;
             }
 
+            // todo: make api return statusID of created post
+            //       then place that into this statusID
             post_status(userID as string, text, media1);
-            // setPosts([
-            //   {
-            //     statusID: "",
-            //     userID: userID,
-            //     text: draftText,
-            //     media1: previewMedia1,
-            //     dateTimePosted: new Date().toString(),
-            //   },
-            //   ...posts,
-            // ]);
+            callbackFunction({
+              statusID: "",
+              userID: userID,
+              text: text,
+              media1: previewMedia1,
+              dateTimePosted: new Date().toString(),
+            });
+
             setText("");
             setMedia1(null);
           }}
@@ -142,7 +146,7 @@ const ComposeStatus = ({
                       }
                       text-lg font-semibold select-none `}
         >
-          Post
+          {buttonText}
         </div>
       </div>
     </div>

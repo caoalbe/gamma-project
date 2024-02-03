@@ -156,7 +156,10 @@ const Post = (props: StatusAPIProps): JSX.Element => {
           </div>
           {replyOpened ? (
             <div className="">
-              <ComposeStatus placeholder="Post your reply!" />
+              <ComposeStatus
+                placeholder="Post your reply!"
+                buttonText="Reply"
+              />
             </div>
           ) : (
             <></>

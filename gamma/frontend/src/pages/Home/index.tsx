@@ -40,18 +40,27 @@ const Home = (): JSX.Element => {
             )}
           </div>
           <div className="w-11/12">
-            <ComposeStatus placeholder="What is happening?!" minLineCount={2} />
+            <ComposeStatus
+              placeholder="What is happening?!"
+              minLineCount={2}
+              buttonText="Post"
+              callbackFunction={(newPost) => {
+                setPosts([newPost, ...posts]);
+              }}
+            />
           </div>
         </div>
-        {posts.map((entry) => (
-          <Post
-            statusID={entry.statusID}
-            userID={entry.userID}
-            text={entry.text}
-            media1={entry.media1}
-            dateTimePosted={entry.dateTimePosted}
-          />
-        ))}
+        {posts.map((entry) => {
+          return (
+            <Post
+              statusID={entry.statusID}
+              userID={entry.userID}
+              text={entry.text}
+              media1={entry.media1}
+              dateTimePosted={entry.dateTimePosted}
+            />
+          );
+        })}
       </div>
     </PageWrapper>
   );

@@ -21,7 +21,6 @@ build:
 
 TODO frontend:
 
-- reply function
 - replace fake data (reply count for post)
 - css styling lookup table
 - different screen sizes (use absolute sizes i think)
@@ -38,7 +37,7 @@ TODO frontend:
 
 TODO backend:
 
+- implement replying to posts
 - prevent user handles matching route urls
 - implement bookmarks
-- implement replying to posts
 - implement qrts?
