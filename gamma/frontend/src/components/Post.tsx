@@ -26,7 +26,6 @@ const Post = (props: StatusAPIProps): JSX.Element => {
   // Replies
   const [replyHovered, setReplyHovered] = useState<boolean>(false);
   const [replyOpened, setReplyOpened] = useState<boolean>(false);
-  const [draftText, setDraftText] = useState<string>("");
 
   // Fetch author info from server
   useEffect(() => {

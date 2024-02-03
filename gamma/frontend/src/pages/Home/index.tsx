@@ -1,19 +1,13 @@
-import { useEffect, useState, useRef, useContext, ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
 import Post from "../../components/Post";
 import PageWrapper from "../../components/PageWrapper";
 import ComposeStatus from "../../components/ComposeStatus";
-import {
-  StatusAPIProps,
-  post_status,
-  get_post,
-} from "../../components/api_endpoints";
+import { StatusAPIProps, get_post } from "../../components/api_endpoints";
 import { UserContext } from "../../UserContext";
 import { Link } from "react-router-dom";
 
 const Home = (): JSX.Element => {
-  const navigate = useNavigate();
-  const { userID, userHandle, userPfp } = useContext(UserContext);
+  const { userHandle, userPfp } = useContext(UserContext);
 
   const [posts, setPosts] = useState<StatusAPIProps[]>([]);
 
