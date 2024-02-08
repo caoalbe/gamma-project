@@ -32,6 +32,7 @@ class Status(models.Model):
     editable = False,
     unique=True
   )
+  replyID = models.ForeignKey('self', on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
   userID = models.ForeignKey(User, on_delete=models.CASCADE)
   text = models.CharField(max_length=280)
   media1 = models.ImageField(upload_to=upload_to, default=None, blank=True, null=True)

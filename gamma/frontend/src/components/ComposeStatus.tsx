@@ -127,6 +127,7 @@ const ComposeStatus = ({
             post_status(userID as string, text, media1);
             callbackFunction({
               statusID: "",
+              replyID: "",
               userID: userID,
               text: text,
               media1: previewMedia1,

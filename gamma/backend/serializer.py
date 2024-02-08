@@ -13,7 +13,7 @@ class StatusSerializer(serializers.ModelSerializer):
 
   class Meta:
     model=Status
-    fields=('statusID', 'userID', 'text', 'media1', 'dateTimePosted')
+    fields=('statusID', 'replyID', 'userID', 'text', 'media1', 'dateTimePosted')
 
 class FollowingSerializer(serializers.ModelSerializer):
   class Meta:

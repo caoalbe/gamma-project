@@ -40,6 +40,7 @@ export interface UserAPIProps {
 
 export interface StatusAPIProps {
   statusID: string;
+  replyID: string;
   userID: string;
   text: string;
   media1: string | null;

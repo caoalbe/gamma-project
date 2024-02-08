@@ -37,7 +37,6 @@ TODO frontend:
 
 TODO backend:
 
-- implement replying to posts
 - prevent user handles matching route urls
 - implement bookmarks
 - implement qrts?

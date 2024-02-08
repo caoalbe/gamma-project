@@ -54,6 +54,7 @@ const Home = (): JSX.Element => {
           return (
             <Post
               statusID={entry.statusID}
+              replyID={entry.replyID}
               userID={entry.userID}
               text={entry.text}
               media1={entry.media1}
