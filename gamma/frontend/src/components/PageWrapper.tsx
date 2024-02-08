@@ -29,14 +29,21 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
       path: "../login",
     },
   ];
+
   return (
     <>
       <div className={`flex ${themes["black"].bgBase}`}>
         {/* left side bar */}
         <div
-          className={`flex-col w-3/12 pt-3 pl-48 border-r ${themes["black"].border} h-dvh fixed`}
+          className={`grow h-dvh sticky top-0
+            border-r ${themes["black"].border} 
+            flex flex-col justify-between`}
         >
-          <div className="flex-col space-y-3">
+          <div
+            id="left-main-buttons"
+            className="w-72 ml-auto mt-3
+                       flex-col space-y-3"
+          >
             {SideBarButtons.map((entry) => (
               <div className="w-11/12 group">
                 <Link to={entry.path}>
@@ -59,8 +66,7 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
               </div>
             ))}
           </div>
-
-          <div className="absolute bottom-0 left-0 pl-48 pr-2 mb-5 w-full">
+          <div id="left-account-button" className="w-72 ml-auto mb-3">
             {userHandle === null ? (
               <>
                 <div className="group w-11/12">
@@ -80,9 +86,9 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
             ) : (
               <>
                 <div
-                  className={`flex py-1 rounded-full hover:${themes["black"].bgHover} duration-150`}
+                  className={`flex py-1 w-11/12 rounded-full hover:${themes["black"].bgHover} duration-150`}
                 >
-                  <div id="pfp" className="w-3/12 p-2">
+                  <div id="pfp" className="w-2/12 p-2">
                     {userPfp === null ? (
                       <></>
                     ) : (
@@ -112,18 +118,13 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
             )}
           </div>
         </div>
-        {/* TODO: replace same width hack to workaorund fixed position  */}
-        <div
-          id="spacing-hack"
-          className="flex-col w-3/12 space-y-6 pt-3 px-4 border-r h-dvh"
-        />
 
         {/* middle content */}
-        <div className="w-5/12">{props.children}</div>
+        <div className="w-[650px]">{props.children}</div>
 
         {/* right side bar */}
         {/* todo: sticky right sidebar */}
-        <div className="w-4/12 text-white border-l border-neutral-700 flex-col space-y-4 pl-10 pt-4">
+        <div className="grow h-dvh sticky border-l border-neutral-700 text-white flex-col space-y-4 pt-4 pl-10">
           <div className="w-8/12 bg-zinc-900 rounded-full py-2 pl-4">
             <span className="text-md text-neutral-500">Fake Search Bar</span>
           </div>

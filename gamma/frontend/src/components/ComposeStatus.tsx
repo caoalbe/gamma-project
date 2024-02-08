@@ -149,7 +149,7 @@ const ComposeStatus = ({
                       ${
                         text === "" && media1 === null
                           ? "bg-sky-800 text-gray-500"
-                          : "bg-sky-500 hover:bg-sky-600 active:bg-sky-700 cursor-pointer"
+                          : "bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-700 cursor-pointer"
                       }
                       text-lg font-semibold select-none `}
         >
