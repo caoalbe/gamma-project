@@ -92,6 +92,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
 
   // Get reply count
   useEffect(() => {
+    // todo: create api query for posts according to reply
     get_post()
       .then((result: StatusAPIProps[]) =>
         result.filter(
