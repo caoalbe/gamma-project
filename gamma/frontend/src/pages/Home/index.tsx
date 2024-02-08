@@ -5,6 +5,7 @@ import ComposeStatus from "../../components/ComposeStatus";
 import { StatusAPIProps, get_post } from "../../components/api_endpoints";
 import { UserContext } from "../../UserContext";
 import { Link } from "react-router-dom";
+import { themes } from "../../components/theme";
 
 const Home = (): JSX.Element => {
   const { userHandle, userPfp } = useContext(UserContext);
@@ -20,11 +21,11 @@ const Home = (): JSX.Element => {
 
   return (
     <PageWrapper>
-      <div className="text-white">
-        <div className="py-6 border-b border-neutral-700" />
+      <div>
+        <div className={`py-6 border-b ${themes["black"].border}`} />
         <div
           id="write-your-tweet"
-          className="flex pt-2 pb-3 pr-3 border-b border-neutral-700"
+          className={`flex pt-2 pb-3 pr-3 border-b ${themes["black"].border}`}
         >
           <div id="pfp-col" className="w-1/12">
             {userHandle === null ? (

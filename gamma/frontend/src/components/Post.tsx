@@ -13,6 +13,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import ComposeStatus from "../components/ComposeStatus";
+import { themes } from "./theme";
 
 const Post = (props: StatusAPIProps): JSX.Element => {
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
       .then((result: StatusAPIProps[]) => {
         setReplyCount(result.length);
       });
-  });
+  }, [props.statusID]);
 
   if (authorInfo === null) {
     return <></>;
@@ -114,7 +115,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
       <Link to={`../${authorInfo.nameHandle}`}>
         <div
           id="post"
-          className="flex py-2 pr-3 border-b border-neutral-700 hover:bg-zinc-950 duration-300"
+          className={`flex py-2 pr-3 border-b ${themes["black"].border} hover:${themes["black"].bgHover} duration-300`}
         >
           <div id="pfp-col" className="w-1/12 pl-2 pr-1">
             <Link to={`../${authorInfo.nameHandle}`}>
@@ -128,21 +129,29 @@ const Post = (props: StatusAPIProps): JSX.Element => {
           <div id="right-col" className="flex-col w-11/12 space-y-0.5 pl-1">
             <div className="">
               <Link to={`../${authorInfo.nameHandle}`}>
-                <span className="font-semibold decoration-1 hover:underline leading-tight">
+                <span
+                  className={`font-semibold decoration-1 hover:underline leading-tight ${themes["black"].textPrimary}`}
+                >
                   {authorInfo.nameDisplay}
                 </span>
-                <span className="text-neutral-500 leading-tight">
+                <span
+                  className={`${themes["black"].textSecondary} leading-tight`}
+                >
                   {" "}
                   @{authorInfo.nameHandle}
                 </span>
               </Link>
 
-              <span className="text-neutral-500 leading-tight">
+              <span
+                className={`${themes["black"].textSecondary} leading-tight`}
+              >
                 {" "}
                 · {process_date_time(props.dateTimePosted)}
               </span>
               <br />
-              <span>{props.text}</span>
+              <span className={`${themes["black"].textPrimary}`}>
+                {props.text}
+              </span>
               {props.media1 === null ? (
                 <></>
               ) : (
@@ -162,7 +171,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
               <Link to={`../${parentAuthorInfo.nameHandle}`}>
                 <div
                   id="reply-post"
-                  className="border border-neutral-700 rounded-xl flex p-2 mt-2"
+                  className={`border ${themes["black"].border} rounded-xl flex p-2 mt-2`}
                 >
                   <div className="">
                     <img
@@ -171,21 +180,29 @@ const Post = (props: StatusAPIProps): JSX.Element => {
                       alt="pfp"
                     />
 
-                    <span className="font-semibold  leading-tight">
+                    <span
+                      className={`font-semibold leading-tight ${themes["black"].textPrimary}`}
+                    >
                       {" "}
                       {parentAuthorInfo.nameDisplay}
                     </span>
-                    <span className="text-neutral-500 leading-tight">
+                    <span
+                      className={`${themes["black"].textSecondary} leading-tight`}
+                    >
                       {" "}
                       @{parentAuthorInfo.nameHandle}
                     </span>
 
-                    <span className="text-neutral-500 leading-tight">
+                    <span
+                      className={`${themes["black"].textSecondary} leading-tight`}
+                    >
                       {" "}
                       · {process_date_time(parentStatus.dateTimePosted)}
                     </span>
                     <br />
-                    <span>{parentStatus.text}</span>
+                    <span className={`${themes["black"].textPrimary}`}>
+                      {parentStatus.text}
+                    </span>
                     {parentStatus.media1 === null ? (
                       <></>
                     ) : (
@@ -204,7 +221,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
             <div id="actions" className="flex">
               <div
                 className={`flex select-none px-5 mr-10 ${
-                  userLikes ? "text-red-500" : "text-neutral-500"
+                  userLikes ? "text-red-500" : themes["black"].textSecondary
                 } hover:text-red-500 cursor-pointer`}
                 onClick={(e) => {
                   e.preventDefault(); // prevents the link from redirecting
@@ -239,7 +256,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
               </div>
               <div
                 className={`flex select-none px-5 mr-10 ${
-                  replyOpened ? "text-blue-500" : "text-neutral-500"
+                  replyOpened ? "text-blue-500" : themes["black"].textSecondary
                 } hover:text-blue-500 cursor-pointer`}
                 onClick={(e) => {
                   e.preventDefault(); // prevents the link from redirecting

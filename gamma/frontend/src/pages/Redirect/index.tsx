@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { themes } from "../../components/theme";
 
 const RedirectPage = ({ targetPage }: { targetPage: string }): JSX.Element => {
   const navigate = useNavigate();
@@ -7,7 +8,11 @@ const RedirectPage = ({ targetPage }: { targetPage: string }): JSX.Element => {
     navigate(`/${targetPage}`);
   }, []);
 
-  return <div className="bg-black text-white h-lvh" />;
+  return (
+    <div
+      className={`${themes["black"].bgBase} ${themes["black"].textPrimary} h-lvh`}
+    />
+  );
 };
 
 export default RedirectPage;

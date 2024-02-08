@@ -14,6 +14,7 @@ import {
 } from "../../components/api_endpoints";
 import Post from "../../components/Post";
 import { UserContext } from "../../UserContext";
+import { themes } from "../../components/theme";
 
 const Profile = (): JSX.Element => {
   const navigate = useNavigate();
@@ -38,13 +39,12 @@ const Profile = (): JSX.Element => {
     );
   }, [nameHandle]);
 
-  // Fetch data from server
+  // Fetch this user's posts
   useEffect(() => {
     if (userInfo === null) {
       return;
     }
 
-    // This user's posts
     get_post().then((result: StatusAPIProps[]) => {
       setUserPosts(
         // TODO: create endpoint to query status by nameHandle
@@ -53,18 +53,25 @@ const Profile = (): JSX.Element => {
         )
       );
     });
+  }, [userInfo]);
+
+  // Fetch follower information
+  useEffect(() => {
+    if (userInfo === null) {
+      return;
+    }
 
     // This user's followers
     get_follower(userInfo.userID).then((result: FollowingAPIProps[]) => {
       setFollowers(result);
-      setUserFollow(followers.some((user) => user.start === userID));
+      setUserFollow(result.some((user) => user.start === userID));
     });
 
     // This user's following
     get_following(userInfo.userID).then((result: FollowingAPIProps[]) => {
       setFollowing(result);
     });
-  }, [followers, userID, userInfo]);
+  }, [userID, userInfo]);
 
   if (userInfo === null) {
     return (
@@ -76,16 +83,20 @@ const Profile = (): JSX.Element => {
   return (
     <PageWrapper>
       <div className="flex-col">
-        <div className="border-b border-neutral-700 pl-6 py-1">
-          <span className="font-semibold text-xl">{userInfo.nameDisplay}</span>
+        <div className={`border-b ${themes["black"].border} pl-6 py-1`}>
+          <span
+            className={`font-semibold text-xl ${themes["black"].textPrimary}`}
+          >
+            {userInfo.nameDisplay}
+          </span>
           <br />
-          <span className="text-neutral-500 text-sm/3">
+          <span className={`${themes["black"].textSecondary} text-sm/3`}>
             {userPosts.length} posts
           </span>
         </div>
         <div
           id="profile-card"
-          className="flex-col border-b border-neutral-700 pb-2"
+          className={`flex-col border-b ${themes["black"].border} pb-2`}
         >
           {userInfo.banner == null ? (
             <div id="pfp" className="ml-4 mb-2 pt-2">
@@ -113,20 +124,24 @@ const Profile = (): JSX.Element => {
               <div id="names" className="flex-col">
                 <div id="display" className="flex">
                   <div>
-                    <span className="font-bold text-xl">
+                    <span
+                      className={`font-bold text-xl ${themes["black"].textPrimary}`}
+                    >
                       {userInfo.nameDisplay}
                     </span>
                   </div>
                 </div>
                 <div id="handle" className="flex space-x-2">
                   <div>
-                    <span className="text-neutral-500">
+                    <span className={`${themes["black"].textSecondary}`}>
                       @{userInfo.nameHandle}
                     </span>
                   </div>
                   {following.some((user) => user.end === userID) ? (
                     <div className="bg-neutral-800 rounded px-1 h-min my-auto leading-none">
-                      <span className="text-neutral-500 text-xs ">
+                      <span
+                        className={`${themes["black"].textSecondary} text-xs`}
+                      >
                         Follows You
                       </span>
                     </div>
@@ -181,11 +196,13 @@ const Profile = (): JSX.Element => {
                 <></>
               ) : (
                 <>
-                  <span>{userInfo.bio}</span>
+                  <span className={`${themes["black"].textPrimary}`}>
+                    {userInfo.bio}
+                  </span>
                   <br />
                 </>
               )}
-              <span className="text-neutral-500 leading-10">
+              <span className={` ${themes["black"].textSecondary} leading-10`}>
                 Joined{" "}
                 {new Date(userInfo.dateTimeJoined).toLocaleDateString(
                   undefined,
@@ -198,12 +215,24 @@ const Profile = (): JSX.Element => {
               <br />
               <div className="flex space-x-3">
                 <div>
-                  <span className="font-bold text-sm">{following.length} </span>
-                  <span className="text-neutral-500 text-sm">Following</span>
+                  <span
+                    className={`font-bold text-sm ${themes["black"].textPrimary}`}
+                  >
+                    {following.length}{" "}
+                  </span>
+                  <span className={`${themes["black"].textSecondary} text-sm`}>
+                    Following
+                  </span>
                 </div>
                 <div>
-                  <span className="font-bold text-sm">{followers.length} </span>
-                  <span className="text-neutral-500 text-sm">Followers</span>
+                  <span
+                    className={`font-bold text-sm ${themes["black"].textPrimary}`}
+                  >
+                    {followers.length}{" "}
+                  </span>
+                  <span className={`${themes["black"].textSecondary} text-sm`}>
+                    Followers
+                  </span>
                 </div>
               </div>
             </div>

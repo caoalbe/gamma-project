@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import { StatusAPIProps, post_status } from "../components/api_endpoints";
+import { themes } from "./theme";
 
 interface ComposeStatusProps {
   className?: string;
@@ -52,10 +53,13 @@ const ComposeStatus = ({
           placeholder={placeholder}
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onClick={(e) => {
+            e.preventDefault();
+          }}
           ref={textAreaRef}
           className={`block w-full bg-inherit resize-none
-                  py-1.5 pl-2 pr-8 text-xl text-white
-                  placeholder:text-neutral-500 focus:outline-0
+                  py-1.5 pl-2 pr-8 text-xl ${themes["black"].textPrimary}
+                  placeholder:${themes["black"].textSecondary} focus:outline-0
                   `}
           rows={minLineCount}
         />
@@ -104,7 +108,8 @@ const ComposeStatus = ({
             }}
           />
           <span
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               mediaInputRef.current?.click();
             }}
             className="text-xl leading-none"
@@ -113,7 +118,8 @@ const ComposeStatus = ({
           </span>
         </div>
         <div
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             if (text === "") {
               return;
             }

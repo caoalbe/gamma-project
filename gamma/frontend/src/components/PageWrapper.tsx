@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../UserContext";
+import { themes } from "./theme";
 
 interface PageWrapperProps {
   children: JSX.Element;
@@ -30,16 +31,22 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
   ];
   return (
     <>
-      <div className="flex bg-black">
+      <div className={`flex ${themes["black"].bgBase}`}>
         {/* left side bar */}
-        <div className="flex-col w-3/12 pt-3 pl-48 border-r border-neutral-700 h-dvh fixed">
+        <div
+          className={`flex-col w-3/12 pt-3 pl-48 border-r ${themes["black"].border} h-dvh fixed`}
+        >
           <div className="flex-col space-y-3">
             {SideBarButtons.map((entry) => (
               <div className="w-11/12 group">
                 <Link to={entry.path}>
-                  <div className="w-min py-2 px-6 rounded-full group-hover:bg-zinc-900 duration-150">
+                  <div
+                    className={`w-min py-2 px-6 rounded-full group-hover:${themes["black"].bgHover} duration-150`}
+                  >
                     <span
-                      className={`text-white text-2xl select-none ${
+                      className={`${
+                        themes["black"].textPrimary
+                      } text-2xl select-none ${
                         ".." + pathname === entry.path
                           ? "font-semibold"
                           : "font-normal"
@@ -58,8 +65,12 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
               <>
                 <div className="group w-11/12">
                   <Link to={"/login"}>
-                    <div className="mx-auto w-fit py-2 px-8 rounded-full text-center group-hover:bg-zinc-900 duration-150">
-                      <span className="text-white font-bold text-lg">
+                    <div
+                      className={`mx-auto w-fit py-2 px-8 rounded-full text-center group-hover:${themes["black"].bgHover} duration-150`}
+                    >
+                      <span
+                        className={`${themes["black"].textPrimary} font-bold text-lg`}
+                      >
                         Log In
                       </span>
                     </div>
@@ -68,7 +79,9 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
               </>
             ) : (
               <>
-                <div className="flex py-1 rounded-full hover:bg-zinc-900 duration-150">
+                <div
+                  className={`flex py-1 rounded-full hover:${themes["black"].bgHover} duration-150`}
+                >
                   <div id="pfp" className="w-3/12 p-2">
                     {userPfp === null ? (
                       <></>
@@ -84,9 +97,15 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
                     id="text"
                     className="w-9/12 mr-3 my-auto overflow-hidden text-clip whitespace-nowrap leading-tight"
                   >
-                    <span className="text-white font-bold ">{userDisplay}</span>
+                    <span
+                      className={`${themes["black"].textPrimary} font-bold `}
+                    >
+                      {userDisplay}
+                    </span>
                     <br />
-                    <span className="text-neutral-500">@{userHandle}</span>
+                    <span className={`${themes["black"].textSecondary}`}>
+                      @{userHandle}
+                    </span>
                   </div>
                 </div>
               </>
@@ -100,7 +119,7 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
         />
 
         {/* middle content */}
-        <div className="w-5/12 text-white">{props.children}</div>
+        <div className="w-5/12">{props.children}</div>
 
         {/* right side bar */}
         {/* todo: sticky right sidebar */}

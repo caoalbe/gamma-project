@@ -3,6 +3,7 @@ import PageWrapper from "../../components/PageWrapper";
 import { UserContext } from "../../UserContext";
 import { api_login } from "../../components/api_endpoints";
 import { useNavigate } from "react-router-dom";
+import { themes } from "../../components/theme";
 
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
@@ -20,7 +21,9 @@ const Login = (): JSX.Element => {
   return (
     <PageWrapper>
       <div className="flex-col">
-        <div className="flex-col w-full py-4 border-b border-neutral-700 space-y-3">
+        <div
+          className={`flex-col w-full py-4 border-b ${themes["black"].border} space-y-3`}
+        >
           <div className="pl-6">
             <span className="text-2xl font-bold text-center">
               Existing User
@@ -34,9 +37,9 @@ const Login = (): JSX.Element => {
                 setLoginName(e.target.value);
                 setLoginFailed(false);
               }}
-              className="block w-9/12 bg-zinc-900 rounded-full mx-auto
-                              py-1.5 pl-4 pr-8 text-xl text-white
-                              placeholder:text-neutral-500 focus:outline-0"
+              className={`block w-9/12 ${themes["black"].bgHover} rounded-full mx-auto
+                              py-1.5 pl-4 pr-8 text-xl ${themes["black"].textPrimary}
+                              placeholder:${themes["black"].textSecondary} focus:outline-0`}
             />
           </div>
           <div>
@@ -48,9 +51,9 @@ const Login = (): JSX.Element => {
                 setLoginPass(e.target.value);
                 setLoginFailed(false);
               }}
-              className="block w-9/12 bg-zinc-900 rounded-full mx-auto
-                              py-1.5 pl-4 pr-8 text-xl text-white
-                              placeholder:text-neutral-500 focus:outline-0"
+              className={`block w-9/12 ${themes["black"].bgHover} rounded-full mx-auto
+                              py-1.5 pl-4 pr-8 text-xl ${themes["black"].textPrimary}
+                              placeholder:${themes["black"].textSecondary} focus:outline-0`}
             />
           </div>
           <div
@@ -82,7 +85,9 @@ const Login = (): JSX.Element => {
             </span>
           </div>
         </div>
-        <div className="flex-col w-full py-4 border-b border-neutral-700 space-y-3">
+        <div
+          className={`"flex-col w-full py-4 border-b ${themes["black"].border} space-y-3"`}
+        >
           <div className="pl-6">
             <span className="text-2xl font-bold text-center">New User</span>
           </div>
@@ -91,9 +96,9 @@ const Login = (): JSX.Element => {
               placeholder="Username"
               value={createName}
               onChange={(e) => setCreateName(e.target.value)}
-              className="block w-9/12 bg-zinc-900 rounded-full mx-auto
-                              py-1.5 pl-4 pr-8 text-xl text-white
-                              placeholder:text-neutral-500 focus:outline-0"
+              className={`block w-9/12 ${themes["black"].bgHover} rounded-full mx-auto
+                              py-1.5 pl-4 pr-8 text-xl ${themes["black"].textPrimary}
+                              placeholder:${themes["black"].textSecondary} focus:outline-0`}
             />
           </div>
           <div>
@@ -102,9 +107,9 @@ const Login = (): JSX.Element => {
               type="password"
               value={createPass}
               onChange={(e) => setCreatePass(e.target.value)}
-              className="block w-9/12 bg-zinc-900 rounded-full mx-auto
-                              py-1.5 pl-4 pr-8 text-xl text-white
-                              placeholder:text-neutral-500 focus:outline-0"
+              className={`block w-9/12 ${themes["black"].bgHover} rounded-full mx-auto
+                              py-1.5 pl-4 pr-8 text-xl ${themes["black"].textPrimary}
+                              placeholder:${themes["black"].textSecondary} focus:outline-0`}
             />
           </div>
           <div
