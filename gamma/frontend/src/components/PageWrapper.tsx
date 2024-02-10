@@ -7,6 +7,8 @@ import {
   FollowingAPIProps,
   get_user_by_id,
   get_following,
+  delete_follow,
+  post_follow,
 } from "./api_endpoints";
 
 const suggestedUserID: string[] = [
@@ -118,7 +120,7 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
             ))}
           </div>
           <div id="left-account-button" className="w-60 ml-auto mb-3">
-            {userHandle === null ? (
+            {userID === null ? (
               <>
                 <div className="group w-11/12">
                   <Link to={"/login"}>
@@ -191,7 +193,10 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
                 <span className="text-xl font-bold">Who to follow</span>
               </div>
               {followSuggestions.map(
-                (entry: UserAPIProps & Partial<{ isFollowing: Boolean }>) => {
+                (
+                  entry: UserAPIProps & Partial<{ isFollowing: Boolean }>,
+                  index: number
+                ) => {
                   return (
                     <Link to={`../${entry.nameHandle}`}>
                       <div className="flex pl-4 py-2 hover:bg-zinc-800 duration-200 cursor-pointer select-none">
@@ -216,10 +221,20 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
                                     bg-white hover:bg-slate-100"
                             onClick={(e) => {
                               e.preventDefault();
-                              if (userHandle === null) {
+                              if (userID === null) {
                                 navigate("/login");
                                 return;
                               }
+                              post_follow(userID, entry.userID);
+
+                              // this just does followSuggestions[index].isFollowing = true
+                              setFollowSuggestions((prevList) =>
+                                prevList.map((value) =>
+                                  value.userID === entry.userID
+                                    ? { ...value, isFollowing: true }
+                                    : value
+                                )
+                              );
                             }}
                           >
                             Follow
@@ -231,10 +246,20 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
                                      hover:border-red-600 group"
                             onClick={(e) => {
                               e.preventDefault();
-                              if (userHandle === null) {
+                              if (userID === null) {
                                 navigate("/login");
                                 return;
                               }
+                              delete_follow(userID, entry.userID);
+
+                              // this just does followSuggestions[index].isFollowing = false
+                              setFollowSuggestions((prevList) =>
+                                prevList.map((value) =>
+                                  value.userID === entry.userID
+                                    ? { ...value, isFollowing: false }
+                                    : value
+                                )
+                              );
                             }}
                           >
                             <span
