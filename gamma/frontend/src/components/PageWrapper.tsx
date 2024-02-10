@@ -92,8 +92,9 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
         {/* left side bar */}
         <div
           className={`flex-1 h-dvh sticky top-0
-            border-r ${themes["black"].border} 
-            flex flex-col justify-between`}
+                      flex flex-col  
+                      border-r ${themes["black"].border} 
+                      justify-between`}
         >
           <div
             id="left-main-buttons"
@@ -175,13 +176,13 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
         </div>
 
         {/* middle content */}
-        <div className="w-[650px]">{props.children}</div>
+        <div className="w-[650px] flex-none">{props.children}</div>
 
         {/* right side bar */}
         <div
-          className={`flex-1 h-dvh sticky top-0 
-                        border-l ${themes["black"].border} text-white 
-                        flex flex-col flex-none space-y-4`}
+          className={`flex flex-1 h-dvh sticky top-0 
+                      flex flex-col space-y-4              
+                      border-l ${themes["black"].border} text-white`}
         >
           <div
             id="right-content"
@@ -201,7 +202,13 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
                 ) => {
                   return (
                     <Link to={`../${entry.nameHandle}`}>
-                      <div className="flex pl-4 py-2 hover:bg-zinc-800 duration-200 cursor-pointer select-none">
+                      <div
+                        className={`flex pl-4 py-2 hover:bg-zinc-800 duration-200 cursor-pointer select-none ${
+                          index === followSuggestions.length - 1
+                            ? "hover:rounded-b-xl"
+                            : ""
+                        }`}
+                      >
                         <div id="pfp-section" className="w-2/12 pr-2">
                           <img
                             src={entry.pfp}
