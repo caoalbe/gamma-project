@@ -15,9 +15,11 @@ import {
 const ActionRow = ({
   statusProps,
   forceOpenReply = false,
+  partitionCompose = false,
 }: {
   statusProps: StatusAPIProps;
   forceOpenReply?: boolean;
+  partitionCompose?: boolean;
 }): JSX.Element => {
   const { userID } = useContext(UserContext);
   const navigate = useNavigate();
@@ -65,7 +67,7 @@ const ActionRow = ({
 
   return (
     <>
-      <div id="actions" className="flex">
+      <div id="actions" className={`flex ${partitionCompose ? "mb-2" : ""}`}>
         <div
           className={`flex select-none px-5 mr-10 ${
             userLikes ? "text-red-500" : themes["black"].textSecondary
@@ -123,7 +125,11 @@ const ActionRow = ({
         </div>
       </div>
       {replyOpened || forceOpenReply ? (
-        <div className="">
+        <div
+          className={`${
+            partitionCompose ? `border-t ${themes["black"].border}` : ""
+          }`}
+        >
           <ComposeStatus placeholder="Post your reply!" buttonText="Reply" />
         </div>
       ) : (

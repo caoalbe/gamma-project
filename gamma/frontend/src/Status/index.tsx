@@ -179,7 +179,11 @@ const Status = (): JSX.Element => {
             </div>
             <div className={`text-white ${themes["black"].border} mt-2`}>
               {/* todo: add pfp next to reply */}
-              <ActionRow statusProps={statusInfo} forceOpenReply />
+              <ActionRow
+                statusProps={statusInfo}
+                forceOpenReply
+                partitionCompose
+              />
             </div>
           </div>
           {replyStatusInfo.map((reply: StatusAPIProps) => (
