@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
 import { themes } from "./theme";
+import { github, repo } from "./external_links";
 import {
   UserAPIProps,
   FollowingAPIProps,
@@ -60,6 +61,7 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
     if (userID === null) {
       return;
     }
+
     get_following(userID).then((followingData: FollowingAPIProps[]) => {
       setFollowing(followingData);
     });
@@ -139,9 +141,9 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
             ) : (
               <>
                 <div
-                  className={`flex py-1 w-11/12 rounded-full hover:${themes["black"].bgHover} duration-150`}
+                  className={`flex py-1 w-11/12 rounded-full hover:${themes["black"].bgHover} duration-150 cursor-pointer select-none`}
                 >
-                  <div id="pfp" className="w-2/12 p-2">
+                  <div id="pfp" className="w-3/12 p-2">
                     {userPfp === null ? (
                       <></>
                     ) : (
@@ -280,21 +282,13 @@ const PageWrapper = (props: PageWrapperProps): JSX.Element => {
             </div>
             <div className="w-8/12 text-sm text-neutral-500">
               <span className="hover:underline">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://github.com/caoalbe/gamma-project"
-                >
+                <a target="_blank" rel="noopener noreferrer" href={repo}>
                   Source Code
                 </a>
               </span>
               {" · "}
               <span className="hover:underline">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://github.com/caoalbe"
-                >
+                <a target="_blank" rel="noopener noreferrer" href={github}>
                   Github
                 </a>
               </span>

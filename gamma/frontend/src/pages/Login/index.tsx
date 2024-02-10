@@ -25,7 +25,9 @@ const Login = (): JSX.Element => {
           className={`flex-col w-full py-4 border-b ${themes["black"].border} space-y-3`}
         >
           <div className="pl-6">
-            <span className="text-2xl font-bold text-center">
+            <span
+              className={`text-2xl font-bold text-center ${themes["black"].textPrimary}`}
+            >
               Existing User
             </span>
           </div>
@@ -77,7 +79,11 @@ const Login = (): JSX.Element => {
               });
             }}
           >
-            <span className="text-lg font-semibold">Login</span>
+            <span
+              className={`text-lg font-semibold ${themes["black"].textPrimary}`}
+            >
+              Login
+            </span>
           </div>
           <div className="text-center">
             <span className={`text-red-500 ${loginFailed ? "" : "invisible"}`}>
@@ -89,7 +95,11 @@ const Login = (): JSX.Element => {
           className={`"flex-col w-full py-4 border-b ${themes["black"].border} space-y-3"`}
         >
           <div className="pl-6">
-            <span className="text-2xl font-bold text-center">New User</span>
+            <span
+              className={`text-2xl font-bold text-center ${themes["black"].textPrimary}`}
+            >
+              New User
+            </span>
           </div>
           <div>
             <input
@@ -117,7 +127,9 @@ const Login = (): JSX.Element => {
                             px-5 py-1
                             bg-blue-400 hover:bg-blue-500 active:bg-blue-600"
           >
-            <button className="text-lg font-semibold select-none">
+            <button
+              className={`text-lg font-semibold select-none ${themes["black"].textPrimary}`}
+            >
               Create Account
             </button>
           </div>

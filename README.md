@@ -21,12 +21,10 @@ build:
 
 TODO frontend:
 
-- css styling lookup table
-- different screen sizes (use absolute sizes i think)
 - replace 'React App' and atom icon in tab bar
 - edit profile page
-- settings page
 - dedicated status page
+- settings page
 - make scrollbar consistent
 - enforce character limit on frontend
 - this profile doesnt exist page
