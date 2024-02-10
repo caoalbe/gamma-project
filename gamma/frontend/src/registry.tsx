@@ -3,6 +3,7 @@ import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import RedirectPage from "./pages/Redirect";
 import Page404 from "./pages/Page404";
+import Status from "./Status";
 
 const PageInfo = [
   {
@@ -16,6 +17,10 @@ const PageInfo = [
   {
     url: "/login",
     component: <Login />,
+  },
+  {
+    url: "/status/:statusID",
+    component: <Status />,
   },
   {
     url: "",
