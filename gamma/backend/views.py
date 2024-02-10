@@ -5,168 +5,141 @@ from .serializer import StatusSerializer, UserSerializer, FollowingSerializer, L
 from rest_framework import generics, permissions
 import uuid
 
-# Create your views here.
-# todo: figure out how to fold these classes together
-
-# User Views
-class GetAllUserView(generics.CreateAPIView):
+# request --> http body
+# kwargs --> url parameter
+class UserView(generics.GenericAPIView):
   queryset = User.objects.all()
-  http_method_names = ['get']
+  # serializer_class = UserSerializer
+  http_method_names = ['get', 'post']
 
-  def get(self, request, format=None):
-    serializer = UserSerializer(User.objects.all(), many=True)
-    return Response(serializer.data)
-
-class GetUserIDView(generics.CreateAPIView):
-  queryset = User.objects.all()
-  http_method_names = ['get']
-
-  def get(self, request, userID, format=None):
+  def get(self, request, *args, **kwargs):
     try:
-      serializer = UserSerializer(User.objects.filter(userID=userID), many=True)
-      return Response(serializer.data)
-    except User.DoesNotExist:
-      return Response({'error': 'User not found'})
+      userID = kwargs.get('userID', None)
+      nameHandle = kwargs.get('nameHandle', None)
+      password = kwargs.get('password', None)
+
+      output = None
+      if password and nameHandle:
+        output = User.objects.filter(nameHandle=nameHandle, password=password)
+      elif userID:
+        output = User.objects.filter(userID=userID)
+      elif nameHandle:
+        output = User.objects.filter(nameHandle=nameHandle)
+      else:
+        output = User.objects.all()
+
+      return Response(UserSerializer(output, many=True).data)
     
-class GetUserHandleView(generics.CreateAPIView):
-  queryset = User.objects.all()
-  http_method_names = ['get']
-
-  def get(self, request, nameHandle, format=None):
-    try:
-      serializer = UserSerializer(User.objects.filter(nameHandle=nameHandle), many=True)
-      return Response(serializer.data)
-    except User.DoesNotExist:
-      return Response({'error': 'User not found'})
-    
-class GetUserLoginView(generics.CreateAPIView):
-  queryset = User.objects.all()
-  http_method_names = ['get']
-
-  def get(self, request, nameHandle, password, format=None):
-    try:
-      serializer = UserSerializer(User.objects.filter(nameHandle=nameHandle, password=password), many=True)    
-      return Response(serializer.data)
     except User.DoesNotExist:
       return Response({'error': 'User not found'})
 
-# Status(Tweets) Views
-class GetStatusView(generics.CreateAPIView):
-  queryset = Status.objects.all()
-  http_method_names = ['get']
 
-  def get(self, request, format=None):
-    serializer = StatusSerializer(Status.objects.all().order_by('-dateTimePosted'), many=True)
-    return Response(serializer.data)
-  
-class PostStatusView(generics.CreateAPIView):
+class StatusView(generics.GenericAPIView):
   queryset = Status.objects.all()
   serializer_class = StatusSerializer
-  # permission_classes = [permissions.IsAuthenticated]
-  http_method_names = ['post']
+  http_method_names = ['get', 'post']
 
-  def post(self, request, format=None):
-    serializer = StatusSerializer(data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data)
-    return Response(serializer.errors)
-
-  def perform_create(self, serializer):
-    serializer.save(creator=self.request.user)
-
-# Following Views
-class GetFollowingViewSingle(generics.CreateAPIView):
-  queryset = Following.objects.all()
-  http_method_names = ['get']
-
-  def get(self, request, start, end, format=None):
-    serializer = FollowingSerializer(Following.objects.all().filter(start=start, end=end), many=True)
-    return Response(serializer.data)
+  def get(self, request, *args, **kwargs):
+    output = Status.objects.all().order_by('-dateTimePosted')
+    return Response(StatusSerializer(output, many=True).data)
   
-class GetFollowingView(generics.CreateAPIView):
-  queryset = Following.objects.all()
-  http_method_names = ['get']
+  def post(self, request, *args, **kwargs):
+    newStatus = StatusSerializer(data=request.data)
 
-  def get(self, request, start, format=None):
-    serializer = FollowingSerializer(Following.objects.all().filter(start=start), many=True)
-    return Response(serializer.data)
+    if not newStatus.is_valid():
+      return Response(newStatus.errors)
+    
+    newStatus.save()
+    return Response(newStatus.data)
 
-class GetFollowerView(generics.CreateAPIView):
-  queryset = Following.objects.all()
-  http_method_names = ['get']
 
-  def get(self, request, end, format=None):
-    serializer = FollowingSerializer(Following.objects.all().filter(end=end), many=True)
-    return Response(serializer.data)
-
-class PostFollowingView(generics.CreateAPIView):
+class FollowingView(generics.GenericAPIView):
   queryset = Following.objects.all()
   serializer_class = FollowingSerializer
-  http_method_names = ['post']
+  http_method_names = ['get', 'post', 'delete']
 
-  def post(self, request, format=None):
-    serializer = FollowingSerializer(data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data)
-    return Response(serializer.errors)
-  
-  def perform_create(self, serializer):
-    serializer.save(creator=self.request.user)
-
-class DeleteFollowingView(generics.DestroyAPIView):
-  queryset = Following.objects.all()
-  serializer_class = FollowingSerializer
-  http_method_names = ['delete']
-
-  def delete(self, request, format=None):
+  def get(self, request, *args, **kwargs):
     try:
-      Following.objects.filter(start=uuid.UUID(request.data['start']), end=uuid.UUID(request.data['end'])).delete()
-      return Response(status=204)
+      start = kwargs.get('start', None)
+      end = kwargs.get('end', None)
+
+      output = None
+      if start and end:
+        output = Following.objects.filter(start=start, end=end)
+      elif start:
+        output = Following.objects.filter(start=start)
+      elif end:
+        output = Following.objects.filter(end=end)
+
+      return Response(FollowingSerializer(output, many=True).data)
+    
+    except Following.DoesNotExist:
+      return Response({'error': 'Following not found'})
+    
+
+  def post(self, request, *args, **kwargs):
+    newFollowing = FollowingSerializer(data=request.data)
+    if not newFollowing.is_valid():
+      return Response(newFollowing.errors)
+    
+    newFollowing.save()
+    return Response(newFollowing.data)
+
+  def delete(self, request, *args, **kwargs):
+    try:
+      start = request.data["start"]
+      end = request.data["end"]
+
+      if (start is None or end is None):
+        return Response(status=400)
+
+      toDelete = Following.objects.filter(start=uuid.UUID(start), end=uuid.UUID(end))
+      toDelete.delete()
+      return Response(status=200)
+    
     except Following.DoesNotExist:
       return Response(status=404)
-
-# Like Views
-class GetLikeView(generics.CreateAPIView):
+    
+    
+class LikeView(generics.GenericAPIView):
   queryset = Like.objects.all()
-  http_method_names = ['get']
+  http_method_names = ['get', 'post', 'delete']
 
-  def get(self, request, statusID, viewerID, format=None):
-    serializer = LikeSerializer(Like.objects.all().filter(statusID=statusID, viewerID=viewerID), many=True)
-    return Response(serializer.data)
-
-class GetLikeStatusView(generics.CreateAPIView):
-  queryset = Like.objects.all()
-  http_method_names = ['get']
-
-  def get(self, request, statusID, format=None):
-    serializer = LikeSerializer(Like.objects.all().filter(statusID=statusID), many=True)
-    return Response(serializer.data)
-
-class PostLikeView(generics.CreateAPIView):
-  queryset = Like.objects.all()
-  serializer_class = LikeSerializer
-  http_method_names = ['post']
-
-  def post(self, request, format=None):
-    serializer = LikeSerializer(data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data)
-    return Response(serializer.errors)
-  
-  def perform_create(self, serializer):
-    serializer.save(creator=self.request.user)
-
-class DeleteLikeView(generics.DestroyAPIView):
-  queryset = Like.objects.all()
-  serializer_class = LikeSerializer
-  http_method_names = ['delete']
-
-  def delete(self, request, format=None):
+  def get(self, request, *args, **kwargs):
     try:
-      Like.objects.filter(statusID=uuid.UUID(request.data['statusID']), viewerID=uuid.UUID(request.data['viewerID'])).delete()
-      return Response(status=204)
+      viewerID = kwargs.get('viewerID', None)
+      statusID = kwargs.get('statusID', None)
+
+      output = None
+      if viewerID and statusID:
+        output = Like.objects.filter(statusID=statusID, viewerID=viewerID)
+      elif statusID:
+        output = Like.objects.filter(statusID=statusID)
+
+      return Response(LikeSerializer(output, many=True).data)
+       
+    except Like.DoesNotExist:
+      return Response({'error': 'Like not found'})
+    
+  def post(self, request, *args, **kwargs):
+    newLike = LikeSerializer(data=request.data)
+    if not newLike.is_valid():
+      return Response(newLike.errors)
+    
+    newLike.save()
+    return Response(newLike.data)
+  
+  def delete(self, request, *args, **kwargs):
+    try:
+      viewerID = request.data["viewerID"]
+      statusID = request.data["statusID"]
+
+      if (viewerID is None or statusID is None):
+        return Response(status=400)
+      
+      toDelete = Like.objects.filter(statusID=uuid.UUID(statusID), viewerID=uuid.UUID(viewerID))
+      toDelete.delete()
+      return Response(status=200)
+
     except Like.DoesNotExist:
       return Response(status=404)
