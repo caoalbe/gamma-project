@@ -25,7 +25,6 @@ const Profile = (): JSX.Element => {
   const [followers, setFollowers] = useState<FollowingAPIProps[]>([]);
   const [following, setFollowing] = useState<FollowingAPIProps[]>([]);
   const [userFollows, setUserFollow] = useState<boolean>(false); // true iff <userID> follows <userInfo.userID>
-  const [unfollowHover, setUnfollowHover] = useState<boolean>(false); // true when mouse is hover the unfollow button
 
   // Fetch user info from server
   useEffect(() => {
@@ -174,19 +173,18 @@ const Profile = (): JSX.Element => {
                   className="ml-auto my-auto mr-4 w-2/12 px-3 py-1 
                                     rounded-full text-center text-lg font-bold
                                     border rounded-full hover:text-red-600 hover:border-red-600 
-                                    cursor-pointer select-none"
-                  onPointerOver={() => {
-                    setUnfollowHover(true);
-                  }}
-                  onPointerOut={() => {
-                    setUnfollowHover(false);
-                  }}
+                                    cursor-pointer select-none group"
                   onClick={() => {
                     setUserFollow(false);
                     delete_follow(userID, userInfo.userID);
                   }}
                 >
-                  {unfollowHover ? "Unfollow" : "Following"}
+                  <span className="inline group-hover:hidden text-lg text-white">
+                    Following
+                  </span>
+                  <span className="hidden group-hover:inline text-lg ">
+                    Unfollow
+                  </span>
                 </div>
               )}
             </div>

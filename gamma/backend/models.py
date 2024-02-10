@@ -8,6 +8,7 @@ def upload_to(instance, filename):
 # Create your models here.
 class User(models.Model):
   # is userID necessary if nameHandle is unique?
+  readonly_fields = ["userID"]
   userID = models.UUIDField(
     primary_key = True,
     default = uuid.uuid4,
