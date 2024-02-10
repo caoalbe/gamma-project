@@ -52,16 +52,7 @@ const Home = (): JSX.Element => {
           </div>
         </div>
         {posts.map((entry) => {
-          return (
-            <Post
-              statusID={entry.statusID}
-              replyID={entry.replyID}
-              userID={entry.userID}
-              text={entry.text}
-              media1={entry.media1}
-              dateTimePosted={entry.dateTimePosted}
-            />
-          );
+          return <Post statusInfo={entry} />;
         })}
       </div>
     </PageWrapper>

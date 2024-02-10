@@ -237,14 +237,7 @@ const Profile = (): JSX.Element => {
           </div>
         </div>
         {userPosts.map((entry) => (
-          <Post
-            statusID={entry.statusID}
-            replyID={entry.replyID}
-            userID={entry.userID}
-            text={entry.text}
-            media1={entry.media1}
-            dateTimePosted={entry.dateTimePosted}
-          />
+          <Post statusInfo={entry} />
         ))}
       </div>
     </PageWrapper>

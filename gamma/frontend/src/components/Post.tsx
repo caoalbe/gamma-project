@@ -11,7 +11,13 @@ import { themes } from "./theme";
 import Reply from "./Reply";
 import ActionRow from "./ActionRow";
 
-const Post = (props: StatusAPIProps): JSX.Element => {
+const Post = ({
+  statusInfo,
+  hideReply = false,
+}: {
+  statusInfo: StatusAPIProps;
+  hideReply?: boolean;
+}): JSX.Element => {
   const [authorInfo, setAuthorInfo] = useState<UserAPIProps | null>(null);
 
   // Replying To
@@ -22,21 +28,21 @@ const Post = (props: StatusAPIProps): JSX.Element => {
 
   // Fetch author info from server
   useEffect(() => {
-    get_user_by_id(props.userID).then((result) => {
+    get_user_by_id(statusInfo.userID).then((result) => {
       setAuthorInfo(result);
     });
-  }, [props.userID]);
+  }, [statusInfo.userID]);
 
   // Fetch parent post info from server
   useEffect(() => {
-    if (props.replyID === null) {
+    if (statusInfo.replyID === null) {
       return;
     }
 
     get_post()
       .then((result: StatusAPIProps[]) =>
         result.filter(
-          (entry: StatusAPIProps) => entry.statusID === props.replyID
+          (entry: StatusAPIProps) => entry.statusID === statusInfo.replyID
         )
       )
       .then((result: StatusAPIProps[]) => {
@@ -46,7 +52,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
         }
         setParentState(result[0]);
       });
-  }, [props.replyID]);
+  }, [statusInfo.replyID]);
 
   // Fetch account info of parent poster
   useEffect(() => {
@@ -64,7 +70,7 @@ const Post = (props: StatusAPIProps): JSX.Element => {
 
   return (
     <>
-      <Link to={`../status/${props.statusID}`}>
+      <Link to={`../status/${statusInfo.statusID}`}>
         <div
           id="post"
           className={`flex py-2 pr-3 border-b ${themes["black"].border} hover:${themes["black"].bgHover} duration-300`}
@@ -98,30 +104,30 @@ const Post = (props: StatusAPIProps): JSX.Element => {
                 className={`${themes["black"].textSecondary} leading-tight`}
               >
                 {" "}
-                · {process_date_time(props.dateTimePosted)}
+                · {process_date_time(statusInfo.dateTimePosted)}
               </span>
               <br />
               <span className={`${themes["black"].textPrimary}`}>
-                {props.text}
+                {statusInfo.text}
               </span>
-              {props.media1 === null ? (
+              {statusInfo.media1 === null ? (
                 <></>
               ) : (
                 <>
                   <img
-                    src={props.media1}
+                    src={statusInfo.media1}
                     className="rounded-lg w-10/12 mt-2 mx-auto"
                     alt="media 1"
                   />
                 </>
               )}
             </div>
-            {parentStatus === null || parentAuthorInfo === null ? (
+            {parentStatus === null || parentAuthorInfo === null || hideReply ? (
               <></>
             ) : (
               <Reply author={parentAuthorInfo} status={parentStatus} />
             )}
-            <ActionRow statusProps={props} />
+            <ActionRow statusProps={statusInfo} />
           </div>
         </div>
       </Link>

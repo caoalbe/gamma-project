@@ -9,19 +9,23 @@ import {
 import PageWrapper from "../components/PageWrapper";
 import { themes } from "../components/theme";
 import Reply from "../components/Reply";
-import ComposeStatus from "../components/ComposeStatus";
 import ActionRow from "../components/ActionRow";
+import Post from "../components/Post";
 
 const Status = (): JSX.Element => {
   const { statusID } = useParams();
   const [statusInfo, setStatusInfo] = useState<StatusAPIProps | null>(null);
   const [authorInfo, setAuthorInfo] = useState<UserAPIProps | null>(null);
-  const [replyStatusInfo, setReplyStatusInfo] = useState<StatusAPIProps | null>(
+
+  // what this status is replying to
+  const [parentStatusInfo, setParentStatusInfo] =
+    useState<StatusAPIProps | null>(null);
+  const [parentAuthorInfo, setParentAuthorInfo] = useState<UserAPIProps | null>(
     null
   );
-  const [replyAuthorInfo, setReplyAuthorInfo] = useState<UserAPIProps | null>(
-    null
-  );
+
+  // replies for this status
+  const [replyStatusInfo, setReplyStatusInfo] = useState<StatusAPIProps[]>([]);
 
   // fetch data for the post
   useEffect(() => {
@@ -53,14 +57,14 @@ const Status = (): JSX.Element => {
     });
   }, [statusInfo]);
 
-  // fetch data for reply post
+  // fetch data for parent post
   useEffect(() => {
     if (statusInfo === null || statusInfo.replyID === null) {
       // need to reset state because
       // opening a new status page
       // (ex: /status/1234 -- > /status/abcd)
       // is technically the same page; so state is preserved
-      setReplyStatusInfo(null);
+      setParentStatusInfo(null);
       return;
     }
 
@@ -75,25 +79,36 @@ const Status = (): JSX.Element => {
         if (all_posts.length === 0) {
           return null;
         }
-        setReplyStatusInfo(all_posts[0]);
+        setParentStatusInfo(all_posts[0]);
       });
   }, [statusInfo]);
 
-  // fetch data for reply author
+  // fetch data for parent author
   useEffect(() => {
-    if (replyStatusInfo === null) {
-      setReplyAuthorInfo(null);
+    if (parentStatusInfo === null) {
+      setParentAuthorInfo(null);
       return;
     }
 
-    get_user_by_id(replyStatusInfo.userID).then((res: UserAPIProps | null) => {
+    get_user_by_id(parentStatusInfo.userID).then((res: UserAPIProps | null) => {
       if (res === null) {
-        setReplyAuthorInfo(null);
+        setParentAuthorInfo(null);
       }
 
-      setReplyAuthorInfo(res);
+      setParentAuthorInfo(res);
     });
-  }, [replyStatusInfo]);
+  }, [parentStatusInfo]);
+
+  // fetch data for replies
+  useEffect(() => {
+    get_post()
+      .then((all_posts: StatusAPIProps[]) =>
+        all_posts.filter((post: StatusAPIProps) => post.replyID === statusID)
+      )
+      .then((all_replies: StatusAPIProps[]) => {
+        setReplyStatusInfo(all_replies);
+      });
+  }, [statusID]);
 
   return (
     <PageWrapper>
@@ -152,23 +167,24 @@ const Status = (): JSX.Element => {
                 />
               </div>
             )}
-            {replyStatusInfo === null || replyAuthorInfo === null ? (
+            {parentStatusInfo === null || parentAuthorInfo === null ? (
               <></>
             ) : (
-              <Reply author={replyAuthorInfo} status={replyStatusInfo} />
+              <Reply author={parentAuthorInfo} status={parentStatusInfo} />
             )}
             <div
               className={`mt-2 ${themes["black"].textSecondary} border-b ${themes["black"].border} pb-2`}
             >
-              2:13 . Feb 9, 2024
+              2:13 . Feb 9, 2024 . TODO
             </div>
             <div className={`text-white ${themes["black"].border} mt-2`}>
+              {/* todo: add pfp next to reply */}
               <ActionRow statusProps={statusInfo} forceOpenReply />
             </div>
-            {/* <div className={``}>
-              <ComposeStatus placeholder="Post your reply" buttonText="Reply" />
-            </div> */}
           </div>
+          {replyStatusInfo.map((reply: StatusAPIProps) => (
+            <Post statusInfo={reply} hideReply />
+          ))}
         </>
       )}
     </PageWrapper>
