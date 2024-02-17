@@ -1,15 +1,14 @@
 from rest_framework.response import Response
 from .models import Status, User, Following, Like
 from .serializer import StatusSerializer, UserSerializer, FollowingSerializer, LikeSerializer
-
-from rest_framework import generics, permissions
+from rest_framework import generics
 import uuid
 
 # request --> http body
 # kwargs --> url parameter
 class UserView(generics.GenericAPIView):
   queryset = User.objects.all()
-  # serializer_class = UserSerializer
+  serializer_class = UserSerializer
   http_method_names = ['get', 'post']
 
   def get(self, request, *args, **kwargs):
@@ -40,7 +39,20 @@ class StatusView(generics.GenericAPIView):
   http_method_names = ['get', 'post']
 
   def get(self, request, *args, **kwargs):
-    output = Status.objects.all().order_by('-dateTimePosted')
+    statusID = kwargs.get('statusID', None)
+    replyID = kwargs.get('replyID', None)
+    nameHandle = kwargs.get('nameHandle', None)
+
+    if statusID:
+      output = Status.objects.filter(statusID=statusID)
+    elif replyID:
+      output = Status.objects.filter(replyID=replyID)
+    elif nameHandle:
+      output = Status.objects.filter(nameHandle=nameHandle)
+    else:
+      output = Status.objects.all()
+    output = output.order_by('-dateTimePosted')
+
     return Response(StatusSerializer(output, many=True).data)
   
   def post(self, request, *args, **kwargs):
@@ -76,7 +88,6 @@ class FollowingView(generics.GenericAPIView):
     except Following.DoesNotExist:
       return Response({'error': 'Following not found'})
     
-
   def post(self, request, *args, **kwargs):
     newFollowing = FollowingSerializer(data=request.data)
     if not newFollowing.is_valid():
@@ -100,7 +111,7 @@ class FollowingView(generics.GenericAPIView):
     except Following.DoesNotExist:
       return Response(status=404)
     
-    
+
 class LikeView(generics.GenericAPIView):
   queryset = Like.objects.all()
   http_method_names = ['get', 'post', 'delete']
