@@ -11,6 +11,7 @@ import {
   get_following,
   post_follow,
   delete_follow,
+  get_post_handle,
 } from "../../components/api_endpoints";
 import Post from "../../components/Post";
 import { UserContext } from "../../UserContext";
@@ -43,14 +44,8 @@ const Profile = (): JSX.Element => {
     if (userInfo === null) {
       return;
     }
-
-    get_post().then((result: StatusAPIProps[]) => {
-      setUserPosts(
-        // TODO: create endpoint to query status by nameHandle
-        result.filter(
-          (entry: StatusAPIProps) => entry.userID === userInfo.userID
-        )
-      );
+    get_post_handle(userInfo.userID).then((result: StatusAPIProps[]) => {
+      setUserPosts(result);
     });
   }, [userInfo]);
 

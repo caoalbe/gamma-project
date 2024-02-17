@@ -10,6 +10,7 @@ import {
   query_like,
   get_like_by_status,
   get_post,
+  get_post_replyID,
 } from "../components/api_endpoints";
 
 const ActionRow = ({
@@ -53,16 +54,9 @@ const ActionRow = ({
 
   // Get reply count
   useEffect(() => {
-    // todo: create api query for posts according to reply
-    get_post()
-      .then((result: StatusAPIProps[]) =>
-        result.filter(
-          (entry: StatusAPIProps) => entry.replyID === statusProps.statusID
-        )
-      )
-      .then((result: StatusAPIProps[]) => {
-        setReplyCount(result.length);
-      });
+    get_post_replyID(statusProps.statusID).then((result: StatusAPIProps[]) => {
+      setReplyCount(result.length);
+    });
   }, [statusProps.statusID]);
 
   return (

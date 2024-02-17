@@ -5,6 +5,7 @@ import {
   StatusAPIProps,
   get_post,
   get_user_by_id,
+  get_post_statusID,
 } from "../components/api_endpoints";
 import PageWrapper from "../components/PageWrapper";
 import { themes } from "../components/theme";
@@ -29,17 +30,15 @@ const Status = (): JSX.Element => {
 
   // fetch data for the post
   useEffect(() => {
-    get_post()
-      .then((all_posts: StatusAPIProps[]) =>
-        // todo: make dedicated query for this instead of frontend filter
-        all_posts.filter((post: StatusAPIProps) => post.statusID === statusID)
-      )
-      .then((all_posts: StatusAPIProps[]) => {
-        if (all_posts.length === 0) {
-          return null;
-        }
-        setStatusInfo(all_posts[0]);
-      });
+    if (statusID === null) {
+      return;
+    }
+
+    get_post_statusID(statusID as string).then(
+      (post: StatusAPIProps | null) => {
+        setStatusInfo(post);
+      }
+    );
   }, [statusID]);
 
   // fetch data for author
@@ -68,19 +67,11 @@ const Status = (): JSX.Element => {
       return;
     }
 
-    get_post()
-      .then((all_posts: StatusAPIProps[]) =>
-        // todo: make dedicated query for this instead of frontend filter
-        all_posts.filter(
-          (post: StatusAPIProps) => post.statusID === statusInfo.replyID
-        )
-      )
-      .then((all_posts: StatusAPIProps[]) => {
-        if (all_posts.length === 0) {
-          return null;
-        }
-        setParentStatusInfo(all_posts[0]);
-      });
+    get_post_statusID(statusInfo.replyID).then(
+      (parent: StatusAPIProps | null) => {
+        setParentStatusInfo(parent);
+      }
+    );
   }, [statusInfo]);
 
   // fetch data for parent author
