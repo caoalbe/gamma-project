@@ -9,6 +9,9 @@ const GET_USER_LOGIN = SERVER_URL + "get_user_login"; // get user with matching 
 
 // status model
 const GET_STATUS = SERVER_URL + "get_status"; // get all post data
+const GET_STATUS_STATUSID = SERVER_URL + "get_status_statusID";
+const GET_STATUS_REPLYID = SERVER_URL + "get_status_replyID";
+const GET_STATUS_HANDLE = SERVER_URL + "get_status_handle";
 const CREATE_STATUS = SERVER_URL + "post_status"; // create a post
 
 // following model
@@ -74,6 +77,54 @@ export const get_post = async (): Promise<StatusAPIProps[]> => {
     return response;
   } catch (error) {
     throw new Error(`http error fetching status database; ${error}`);
+  }
+};
+
+export const get_post_statusID = async (
+  statusID: string
+): Promise<StatusAPIProps | null> => {
+  try {
+    const response = await fetch(`${GET_STATUS_STATUSID}/${statusID}/`)
+      .then(check_http)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.length > 1) {
+          throw new Error(`statusID ${statusID} should be unique.`);
+        }
+        if (res.length === 0) {
+          return null;
+        }
+        return res[0];
+      });
+    return response;
+  } catch (error) {
+    throw new Error(`http error fetching status by statusID; ${error}`);
+  }
+};
+
+export const get_post_replyID = async (
+  replyID: string
+): Promise<StatusAPIProps[]> => {
+  try {
+    const response = await fetch(`${GET_STATUS_REPLYID}/${replyID}/`)
+      .then(check_http)
+      .then((res) => res.json());
+    return response;
+  } catch (error) {
+    throw new Error(`http error fetching status by replyID; ${error}`);
+  }
+};
+
+export const get_post_handle = async (
+  nameHandle: string
+): Promise<StatusAPIProps[]> => {
+  try {
+    const response = await fetch(`${GET_STATUS_HANDLE}/${nameHandle}/`)
+      .then(check_http)
+      .then((res) => res.json());
+    return response;
+  } catch (error) {
+    throw new Error(`http error fetching status by nameHandle; ${error}`);
   }
 };
 
