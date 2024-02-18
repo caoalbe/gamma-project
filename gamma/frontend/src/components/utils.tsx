@@ -4,6 +4,47 @@ const SECONDS_IN_HOUR = 3_600;
 const SECONDS_IN_DAY = 86_400;
 const SECONDS_IN_WEEK = 604_800;
 
+function short_month(input: number) {
+  // expecting input from [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  if (input < 0 || 11 < input || input - Math.floor(input) > 0) {
+    return `invalid month number: ${input}`;
+  }
+
+  switch (input) {
+    case 0:
+      return "Jan";
+    case 1:
+      return "Feb";
+    case 2:
+      return "Mar";
+    case 3:
+      return "Apr";
+    case 4:
+      return "May";
+    case 5:
+      return "Jun";
+    case 6:
+      return "Jul";
+    case 7:
+      return "Aug";
+    case 8:
+      return "Sep";
+    case 9:
+      return "Oct";
+    case 10:
+      return "Nov";
+    case 11:
+      return "Dec";
+  }
+}
+
+function double_digit(input: number) {
+  if (input.toString().length === 1) {
+    return `0${input}`;
+  }
+  return input.toString();
+}
+
 export function process_date_time(input: string) {
   const postDateTime = new Date(input);
   const currDateTime = new Date();
@@ -36,12 +77,17 @@ export function process_date_time(input: string) {
   }
 
   // just spell the entire date
-  const options = {
-    year: "numeric" as const,
-    month: "short" as const,
-    day: "numeric" as const,
-  };
-  return postDateTime
-    .toLocaleDateString(undefined, options)
-    .replaceAll(" ", "-");
+  return `${postDateTime.getDate()}-${short_month(
+    postDateTime.getMonth()
+  )}-${postDateTime.getFullYear()}`;
+}
+
+export function full_date_time(input: string) {
+  const target = new Date(input);
+
+  return `${double_digit(target.getHours())}:${double_digit(
+    target.getMinutes()
+  )} · ${short_month(
+    target.getMonth()
+  )} ${target.getDate()}, ${target.getFullYear()}`;
 }

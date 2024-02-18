@@ -3,10 +3,11 @@ import { useState, useEffect } from "react";
 import {
   UserAPIProps,
   StatusAPIProps,
-  get_post,
   get_user_by_id,
   get_post_statusID,
+  get_post_replyID,
 } from "../components/api_endpoints";
+import { full_date_time } from "../components/utils";
 import PageWrapper from "../components/PageWrapper";
 import { themes } from "../components/theme";
 import Reply from "../components/Reply";
@@ -92,13 +93,14 @@ const Status = (): JSX.Element => {
 
   // fetch data for replies
   useEffect(() => {
-    get_post()
-      .then((all_posts: StatusAPIProps[]) =>
-        all_posts.filter((post: StatusAPIProps) => post.replyID === statusID)
-      )
-      .then((all_replies: StatusAPIProps[]) => {
+    if (statusID === null) {
+      return;
+    }
+    get_post_replyID(statusID as string).then(
+      (all_replies: StatusAPIProps[]) => {
         setReplyStatusInfo(all_replies);
-      });
+      }
+    );
   }, [statusID]);
 
   return (
@@ -166,10 +168,10 @@ const Status = (): JSX.Element => {
             <div
               className={`mt-2 ${themes["black"].textSecondary} border-b ${themes["black"].border} pb-2`}
             >
-              2:13 . Feb 9, 2024 . TODO
+              {full_date_time(statusInfo.dateTimePosted)}
             </div>
             <div className={`text-white ${themes["black"].border} mt-2`}>
-              {/* todo: add pfp next to reply */}
+              {/* todo: add pfp next to compose reply */}
               <ActionRow
                 statusProps={statusInfo}
                 forceOpenReply

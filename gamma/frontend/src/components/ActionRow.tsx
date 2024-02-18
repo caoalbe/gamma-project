@@ -9,7 +9,6 @@ import {
   post_like,
   query_like,
   get_like_by_status,
-  get_post,
   get_post_replyID,
 } from "../components/api_endpoints";
 
