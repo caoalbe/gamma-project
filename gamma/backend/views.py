@@ -33,21 +33,19 @@ class UserView(generics.GenericAPIView):
       return Response({'error': 'User not found'})
     
   def put(self, request, *args, **kwargs):
-    print("---------- put ----------")
-    userID = request.data["userID"]
+    try:
+      userID = request.data["userID"]
 
-    if userID:
       target = User.objects.get(userID=userID)
-
-      newUser = UserSerializer(target, data=request.data, partial=True)
-      if not newUser.is_valid():
-        print(newUser.errors)
-        return Response(newUser.errors)
+      updatedUser = UserSerializer(target, data=request.data, partial=True)
+      if not updatedUser.is_valid():
+        return Response(updatedUser.errors)
       
-      newUser.save()
-      return Response(newUser.data)
-    else:
-      return Response({'error': 'User not found'})
+      updatedUser.save()
+      return Response(updatedUser.data)
+    
+    except Exception as e:
+      return Response({'error': 'Error updating user'})
 
 
 class StatusView(generics.GenericAPIView):
