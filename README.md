@@ -23,6 +23,7 @@ TODO frontend:
 
 - replace 'React App' and atom icon in tab bar
 - edit profile page
+- persist login on page refresh (cookies?)
 - settings page
 - make scrollbar consistent
 - enforce character limit on frontend

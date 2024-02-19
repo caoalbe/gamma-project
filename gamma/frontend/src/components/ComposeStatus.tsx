@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import { StatusAPIProps, post_status } from "../components/api_endpoints";
-import { themes } from "./theme";
+import { themes, brand } from "./theme";
 
 interface ComposeStatusProps {
   className?: string;
@@ -148,8 +148,8 @@ const ComposeStatus = ({
                       mr-2 px-5 py-1
                       ${
                         text === "" && media1 === null
-                          ? "bg-sky-800 text-gray-500"
-                          : "bg-sky-500 text-white hover:bg-sky-600 active:bg-sky-700 cursor-pointer"
+                          ? `${brand.disable} text-gray-500`
+                          : `${brand.base} text-white hover:${brand.hover} active:${brand.press} cursor-pointer`
                       }
                       text-lg font-semibold select-none `}
         >

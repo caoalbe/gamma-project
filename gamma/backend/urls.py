@@ -11,6 +11,7 @@ urlpatterns = [
   path('get_user_id/<str:userID>/', views.UserView.as_view(), name='user-ID'),
   path('get_user_handle/<str:nameHandle>/', views.UserView.as_view(), name='user-Handle'),
   path('get_user_login/<str:nameHandle>/<str:password>/', views.UserView.as_view(), name='user-login'),
+  path('put_user/', views.UserView.as_view(), name="modify user"),
   path('get_following_single/<str:start>/<str:end>/', views.FollowingView.as_view(), name='following-get-edge'),
   path('get_following/<str:start>/', views.FollowingView.as_view(), name='following-list'),
   path('get_follower/<str:end>/', views.FollowingView.as_view(), name='follower-list'),

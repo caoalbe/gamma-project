@@ -9,7 +9,7 @@ import uuid
 class UserView(generics.GenericAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
-  http_method_names = ['get', 'post']
+  http_method_names = ['get', 'post', 'put']
 
   def get(self, request, *args, **kwargs):
     try:
@@ -31,6 +31,23 @@ class UserView(generics.GenericAPIView):
     
     except User.DoesNotExist:
       return Response({'error': 'User not found'})
+    
+  def put(self, request, *args, **kwargs):
+    print("---------- put ----------")
+    userID = request.data["userID"]
+
+    if userID:
+      target = User.objects.get(userID=userID)
+
+      newUser = UserSerializer(target, data=request.data, partial=True)
+      if not newUser.is_valid():
+        print(newUser.errors)
+        return Response(newUser.errors)
+      
+      newUser.save()
+      return Response(newUser.data)
+    else:
+      return Response({'error': 'User not found'})
 
 
 class StatusView(generics.GenericAPIView):
@@ -48,7 +65,7 @@ class StatusView(generics.GenericAPIView):
     elif replyID:
       output = Status.objects.filter(replyID=replyID)
     elif nameHandle:
-      output = Status.objects.filter(nameHandle=nameHandle)
+      output = Status.objects.filter(userID__nameHandle=nameHandle)
     else:
       output = Status.objects.all()
     output = output.order_by('-dateTimePosted')

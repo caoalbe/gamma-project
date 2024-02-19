@@ -6,6 +6,7 @@ const GET_USER_LIST = SERVER_URL + "get_user"; // get all user data
 const GET_USER_ID = SERVER_URL + "get_user_id"; // get user data by ID
 const GET_USER_HANDLE = SERVER_URL + "get_user_handle"; // get user data by handle
 const GET_USER_LOGIN = SERVER_URL + "get_user_login"; // get user with matching handle and password
+const PUT_USER = SERVER_URL + "put_user"; // modify user data
 
 // status model
 const GET_STATUS = SERVER_URL + "get_status"; // get all post data
@@ -177,6 +178,43 @@ export const get_user_by_handle = async (
     return res;
   } catch (error) {
     throw new Error(`http error fetching user database by handle; ${error}`);
+  }
+};
+
+// update existing user data
+export const put_user = async (
+  userID: string,
+  banner: File | null,
+  pfp: File | null,
+  nameDisplay: string | null,
+  bio: string | null
+) => {
+  try {
+    const formData = new FormData();
+    formData.append("userID", userID);
+
+    if (banner !== null) {
+      formData.append("banner", banner);
+    }
+
+    if (pfp !== null) {
+      formData.append("pfp", pfp);
+    }
+
+    if (nameDisplay !== null) {
+      formData.append("nameDisplay", nameDisplay);
+    }
+
+    if (bio !== null) {
+      formData.append("bio", bio);
+    }
+
+    await fetch(`${PUT_USER}/`, {
+      method: "PUT",
+      body: formData,
+    });
+  } catch (error) {
+    throw new Error(`error modify user; ${error}`);
   }
 };
 

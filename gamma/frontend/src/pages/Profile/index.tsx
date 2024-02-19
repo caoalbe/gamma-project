@@ -6,7 +6,6 @@ import {
   StatusAPIProps,
   FollowingAPIProps,
   get_user_by_handle,
-  get_post,
   get_follower,
   get_following,
   post_follow,
@@ -44,7 +43,7 @@ const Profile = (): JSX.Element => {
     if (userInfo === null) {
       return;
     }
-    get_post_handle(userInfo.userID).then((result: StatusAPIProps[]) => {
+    get_post_handle(userInfo.nameHandle).then((result: StatusAPIProps[]) => {
       setUserPosts(result);
     });
   }, [userInfo]);
@@ -144,7 +143,62 @@ const Profile = (): JSX.Element => {
                   )}
                 </div>
               </div>
-              {userID === null || !userFollows ? (
+              {userID === userInfo.userID ? (
+                <div
+                  id="follow"
+                  className={`ml-auto my-auto mr-4 w-2/12 px-3 py-1 
+                                    border rounded-full text-center text-lg font-bold ${themes["black"].textPrimary}
+                                    ${themes["black"].bgBase} hover:${themes["black"].bgHover}
+                                    cursor-pointer select-none`}
+                  onClick={() => {
+                    navigate(`/edit/${userID}`);
+                  }}
+                >
+                  Edit
+                </div>
+              ) : (
+                <>
+                  {userID === null || !userFollows ? (
+                    <div
+                      id="follow"
+                      className="ml-auto my-auto mr-4 w-2/12 px-3 py-1 
+                                    border rounded-full text-center text-lg text-black font-bold
+                                    bg-white hover:bg-slate-100
+                                    cursor-pointer select-none"
+                      onClick={() => {
+                        setUserFollow(true);
+                        if (userID === null) {
+                          // redirect
+                          navigate("/login");
+                        }
+                        post_follow(userID as string, userInfo.userID);
+                      }}
+                    >
+                      Follow
+                    </div>
+                  ) : (
+                    <div
+                      id="unfollow"
+                      className="ml-auto my-auto mr-4 w-2/12 px-3 py-1 
+                                    rounded-full text-center text-lg font-bold
+                                    border rounded-full hover:text-red-600 hover:border-red-600 
+                                    cursor-pointer select-none group"
+                      onClick={() => {
+                        setUserFollow(false);
+                        delete_follow(userID, userInfo.userID);
+                      }}
+                    >
+                      <span className="inline group-hover:hidden text-lg text-white">
+                        Following
+                      </span>
+                      <span className="hidden group-hover:inline text-lg ">
+                        Unfollow
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
+              {/* {userID === null || !userFollows ? (
                 <div
                   id="follow"
                   className="ml-auto my-auto mr-4 w-2/12 px-3 py-1 
@@ -181,7 +235,7 @@ const Profile = (): JSX.Element => {
                     Unfollow
                   </span>
                 </div>
-              )}
+              )} */}
             </div>
 
             <div>

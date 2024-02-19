@@ -26,3 +26,10 @@ export const themes: { [key: string]: Theme } = {
     border: "border-neutral-700",
   },
 };
+
+export const brand: { [key: string]: string } = {
+  base: "bg-sky-500",
+  hover: "bg-sky-600",
+  press: "bg-sky-700",
+  disable: "bg-sky-800",
+};
