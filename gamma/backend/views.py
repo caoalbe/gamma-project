@@ -46,6 +46,15 @@ class UserView(generics.GenericAPIView):
     
     except Exception as e:
       return Response({'error': 'Error updating user'})
+    
+  def post(self, request, *args, **kwargs):
+    newUser = UserSerializer(data=request.data)
+
+    if not newUser.is_valid():
+      return Response(newUser.errors)
+    
+    newUser.save()
+    return Response(newUser.data)
 
 
 class StatusView(generics.GenericAPIView):
