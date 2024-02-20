@@ -53,7 +53,7 @@ class UserView(generics.GenericAPIView):
     if not newUser.is_valid():
       return Response(newUser.errors)
     
-    newUser.save()
+    newUser.save(password = request.data["password"])
     return Response(newUser.data)
 
 

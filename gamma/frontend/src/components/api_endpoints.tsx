@@ -7,6 +7,7 @@ const GET_USER_ID = SERVER_URL + "get_user_id"; // get user data by ID
 const GET_USER_HANDLE = SERVER_URL + "get_user_handle"; // get user data by handle
 const GET_USER_LOGIN = SERVER_URL + "get_user_login"; // get user with matching handle and password
 const PUT_USER = SERVER_URL + "put_user"; // modify user data
+const CREATE_USER = SERVER_URL + "post_user"; // sign up new user
 
 // status model
 const GET_STATUS = SERVER_URL + "get_status"; // get all post data
@@ -215,6 +216,29 @@ export const put_user = async (
     });
   } catch (error) {
     throw new Error(`error modify user; ${error}`);
+  }
+};
+
+// user creation
+export const post_user = async (
+  nameHandle: string,
+  password: string,
+  nameDisplay: string
+): Promise<UserAPIProps> => {
+  try {
+    const formData = new FormData();
+    formData.append("nameHandle", nameHandle);
+    formData.append("password", password);
+    formData.append("nameDisplay", nameDisplay);
+
+    const response = await fetch(`${CREATE_USER}/`, {
+      method: "POST",
+      body: formData,
+    }).then((res) => res.json());
+
+    return response;
+  } catch (error) {
+    throw new Error(`error creating account; ${error}`);
   }
 };
 

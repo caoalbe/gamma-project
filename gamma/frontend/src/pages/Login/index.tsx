@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import PageWrapper from "../../components/PageWrapper";
 import { UserContext } from "../../UserContext";
-import { api_login } from "../../components/api_endpoints";
+import { api_login, post_user } from "../../components/api_endpoints";
 import { useNavigate } from "react-router-dom";
 import { themes } from "../../components/theme";
 
@@ -15,8 +15,10 @@ const Login = (): JSX.Element => {
   const [loginPass, setLoginPass] = useState<string>("");
   const [loginFailed, setLoginFailed] = useState<boolean>(false);
 
-  const [createName, setCreateName] = useState<string>("");
+  const [createHandle, setCreateHandle] = useState<string>("");
+  const [createDisplay, setCreateDisplay] = useState<string>("");
   const [createPass, setCreatePass] = useState<string>("");
+  const [createFailed, setCreateFailed] = useState<number>(0); // 0 -> success, 1 -> taken username 2 -> other
 
   return (
     <PageWrapper>
@@ -92,7 +94,7 @@ const Login = (): JSX.Element => {
           </div>
         </div>
         <div
-          className={`"flex-col w-full py-4 border-b ${themes["black"].border} space-y-3"`}
+          className={`flex-col w-full py-4 border-b ${themes["black"].border} space-y-3`}
         >
           <div className="pl-6">
             <span
@@ -104,8 +106,24 @@ const Login = (): JSX.Element => {
           <div>
             <input
               placeholder="Username"
-              value={createName}
-              onChange={(e) => setCreateName(e.target.value)}
+              value={createHandle}
+              onChange={(e) => {
+                setCreateHandle(e.target.value);
+                setCreateFailed(0);
+              }}
+              className={`block w-9/12 ${themes["black"].bgHover} rounded-full mx-auto
+                              py-1.5 pl-4 pr-8 text-xl ${themes["black"].textPrimary}
+                              placeholder:${themes["black"].textSecondary} focus:outline-0`}
+            />
+          </div>
+          <div>
+            <input
+              placeholder="Display Name"
+              value={createDisplay}
+              onChange={(e) => {
+                setCreateDisplay(e.target.value);
+                setCreateFailed(0);
+              }}
               className={`block w-9/12 ${themes["black"].bgHover} rounded-full mx-auto
                               py-1.5 pl-4 pr-8 text-xl ${themes["black"].textPrimary}
                               placeholder:${themes["black"].textSecondary} focus:outline-0`}
@@ -116,7 +134,10 @@ const Login = (): JSX.Element => {
               placeholder="Password"
               type="password"
               value={createPass}
-              onChange={(e) => setCreatePass(e.target.value)}
+              onChange={(e) => {
+                setCreatePass(e.target.value);
+                setCreateFailed(0);
+              }}
               className={`block w-9/12 ${themes["black"].bgHover} rounded-full mx-auto
                               py-1.5 pl-4 pr-8 text-xl ${themes["black"].textPrimary}
                               placeholder:${themes["black"].textSecondary} focus:outline-0`}
@@ -129,9 +150,48 @@ const Login = (): JSX.Element => {
           >
             <button
               className={`text-lg font-semibold select-none ${themes["black"].textPrimary}`}
+              onClick={() => {
+                if (
+                  createHandle === "" ||
+                  createDisplay === "" ||
+                  createPass === ""
+                ) {
+                  setCreateFailed(2);
+                  return;
+                }
+
+                post_user(createHandle, createPass, createDisplay).then(
+                  (response) => {
+                    if (
+                      response.nameHandle !== createHandle ||
+                      response.nameDisplay !== createDisplay
+                    ) {
+                      setCreateFailed(1);
+                      return;
+                    }
+
+                    // direct to profile edit
+                    setUserID(response.userID);
+                    setUserHandle(createHandle);
+                    setUserDisplay(createDisplay);
+                    setUserPfp(null);
+                    navigate(`/edit/${response.userID}`);
+                  }
+                );
+              }}
             >
               Create Account
             </button>
+          </div>
+          <div className="text-center">
+            <span
+              className={`text-red-500 ${
+                createFailed === 0 ? "invisible" : ""
+              }`}
+            >
+              {createFailed === 1 ? "username already exists" : ""}
+              {createFailed === 2 ? "missing field" : ""}
+            </span>
           </div>
         </div>
       </div>
