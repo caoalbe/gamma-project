@@ -4,15 +4,6 @@ enter environment (`env`):
 start server:
 `python manage.py runserver` <-- root/gamma directory
 
-synchronize db in drastic situations:
-https://stackoverflow.com/questions/25771755/django-operationalerror-no-such-table
-
-or try:
-delete every file, then
-`python manage.py createmigrations backend`
-`python manage.py migrate backend`
-`python manage.py migrate`
-
 run the frontend:
 `npm start` <-- frontend directory
 
@@ -22,7 +13,6 @@ build:
 TODO frontend:
 
 - replace 'React App' and atom icon in tab bar
-- edit profile page
 - persist login on page refresh (cookies?)
 - settings page
 - make scrollbar consistent
@@ -36,4 +26,4 @@ TODO backend:
 
 - prevent user handles matching route urls
 - implement bookmarks
-- implement qrts?
+- implement qrts
